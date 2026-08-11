@@ -1,22 +1,36 @@
+/* Reset */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+
+/* Body */
+
 body {
     font-family: Arial, sans-serif;
+
     background: #f2f2f2;
 
     min-height: 100vh;
 
     display: flex;
+
     justify-content: center;
+
     align-items: center;
+
+    padding: 20px;
 }
 
+
+/* Main Container */
+
 .container {
-    width: 90%;
+    width: 100%;
+
     max-width: 500px;
 
     background: white;
@@ -25,59 +39,138 @@ body {
 
     border-radius: 15px;
 
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    box-shadow:
+        0 5px 20px rgba(0, 0, 0, 0.15);
 }
+
+
+/* Heading */
 
 h1 {
     text-align: center;
 
-    margin-bottom: 20px;
+    font-size: 28px;
+
+    margin-bottom: 8px;
 }
+
+
+/* Subtitle */
+
+.subtitle {
+    text-align: center;
+
+    color: #777;
+
+    margin-bottom: 25px;
+}
+
+
+/* Input Section */
 
 .input-section {
     display: flex;
 
     gap: 10px;
+
+    margin-bottom: 20px;
 }
 
-input {
+
+/* Input */
+
+#taskInput {
     flex: 1;
 
-    padding: 12px;
+    padding: 13px;
 
     border: 1px solid #ccc;
 
     border-radius: 8px;
 
+    outline: none;
+
     font-size: 16px;
 }
 
-button {
-    padding: 12px 18px;
+
+/* Input Focus */
+
+#taskInput:focus {
+    border-color: #333;
+}
+
+
+/* Add Button */
+
+#addBtn {
+    padding: 13px 20px;
 
     border: none;
 
     border-radius: 8px;
 
-    cursor: pointer;
-
     background: #333;
 
     color: white;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
 }
 
-ul {
+
+/* Add Button Hover */
+
+#addBtn:hover {
+    background: #555;
+}
+
+
+/* Task List */
+
+#taskList {
     list-style: none;
-
-    margin-top: 20px;
 }
 
-li {
-    background: #f2f2f2;
 
-    padding: 12px;
+/* Task */
+
+#taskList li {
+    background: #f5f5f5;
+
+    padding: 14px;
 
     margin-bottom: 10px;
 
     border-radius: 8px;
+
+    font-size: 16px;
+
+    border-left: 4px solid #333;
+}
+
+
+/* Mobile Responsive */
+
+@media (max-width: 500px) {
+
+    .container {
+        padding: 20px;
+    }
+
+    .input-section {
+        flex-direction: column;
+    }
+
+    #addBtn {
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
 }
