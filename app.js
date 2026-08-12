@@ -11,8 +11,6 @@ const taskList = document.getElementById("taskList");
 
 addBtn.addEventListener("click", function () {
 
-    // Get input value
-
     const task = taskInput.value.trim();
 
 
@@ -31,22 +29,44 @@ addBtn.addEventListener("click", function () {
     const li = document.createElement("li");
 
 
-    // Add task text
+    // Create task text
 
-    li.textContent = task;
+    const taskText = document.createElement("span");
+
+    taskText.textContent = task;
 
 
-    // Add task to the list
+    // Create Delete button
+
+    const deleteBtn = document.createElement("button");
+
+    deleteBtn.textContent = "Delete";
+
+
+    // Delete task when button is clicked
+
+    deleteBtn.addEventListener("click", function () {
+
+        li.remove();
+
+    });
+
+
+    // Add task text and button
+
+    li.appendChild(taskText);
+
+    li.appendChild(deleteBtn);
+
+
+    // Add task to list
 
     taskList.appendChild(li);
 
 
-    // Clear input box
+    // Clear input
 
     taskInput.value = "";
-
-
-    // Put cursor back in input
 
     taskInput.focus();
 

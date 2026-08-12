@@ -174,3 +174,40 @@ h1 {
     }
 
 }
+/* Task Layout */
+
+#taskList li {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+/* Delete Button */
+
+#taskList li button {
+    padding: 8px 12px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: #d9534f;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 14px;
+}
+
+
+/* Delete Button Hover */
+
+#taskList li button:hover {
+    opacity: 0.8;
+}
