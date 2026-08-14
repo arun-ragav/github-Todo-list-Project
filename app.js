@@ -2,11 +2,14 @@
 // GET HTML ELEMENTS
 // =====================================
 
-const taskInput = document.getElementById("taskInput");
+const taskInput =
+    document.getElementById("taskInput");
 
-const addBtn = document.getElementById("addBtn");
+const addBtn =
+    document.getElementById("addBtn");
 
-const taskList = document.getElementById("taskList");
+const taskList =
+    document.getElementById("taskList");
 
 
 // =====================================
@@ -17,9 +20,11 @@ function showEmptyMessage() {
 
     if (taskList.children.length === 0) {
 
-        const message = document.createElement("li");
+        const message =
+            document.createElement("li");
 
-        message.className = "empty-message";
+        message.className =
+            "empty-message";
 
         message.textContent =
             "📋 No tasks yet. Add a task!";
@@ -50,17 +55,16 @@ function removeEmptyMessage() {
 
 
 // =====================================
-// ADD TASK FUNCTION
+// ADD TASK
 // =====================================
 
 function addTask() {
 
-    // Get task text
+    const task =
+        taskInput.value.trim();
 
-    const task = taskInput.value.trim();
 
-
-    // Check if input is empty
+    // Check empty input
 
     if (task === "") {
 
@@ -82,21 +86,23 @@ function addTask() {
     // CREATE LIST ITEM
     // =================================
 
-    const li = document.createElement("li");
+    const li =
+        document.createElement("li");
 
 
     // =================================
-    // CREATE TASK CONTENT
+    // TASK CONTENT
     // =================================
 
     const taskContent =
         document.createElement("div");
 
-    taskContent.className = "task-content";
+    taskContent.className =
+        "task-content";
 
 
     // =================================
-    // CREATE CHECKBOX
+    // CHECKBOX
     // =================================
 
     const checkbox =
@@ -106,7 +112,7 @@ function addTask() {
 
 
     // =================================
-    // CREATE TASK TEXT
+    // TASK TEXT
     // =================================
 
     const taskText =
@@ -116,7 +122,7 @@ function addTask() {
 
 
     // =================================
-    // COMPLETE / UNCOMPLETE TASK
+    // COMPLETE TASK
     // =================================
 
     checkbox.addEventListener(
@@ -142,7 +148,79 @@ function addTask() {
 
 
     // =================================
-    // CREATE DELETE BUTTON
+    // BUTTON GROUP
+    // =================================
+
+    const taskButtons =
+        document.createElement("div");
+
+    taskButtons.className =
+        "task-buttons";
+
+
+    // =================================
+    // EDIT BUTTON
+    // =================================
+
+    const editBtn =
+        document.createElement("button");
+
+    editBtn.textContent = "Edit";
+
+    editBtn.className = "edit-btn";
+
+
+    // =================================
+    // EDIT TASK
+    // =================================
+
+    editBtn.addEventListener(
+        "click",
+        function () {
+
+            const currentTask =
+                taskText.textContent;
+
+            const newTask =
+                prompt(
+                    "Edit your task:",
+                    currentTask
+                );
+
+
+            // Cancel button pressed
+
+            if (newTask === null) {
+
+                return;
+
+            }
+
+
+            // Empty input
+
+            if (newTask.trim() === "") {
+
+                alert(
+                    "Task cannot be empty!"
+                );
+
+                return;
+
+            }
+
+
+            // Update task
+
+            taskText.textContent =
+                newTask.trim();
+
+        }
+    );
+
+
+    // =================================
+    // DELETE BUTTON
     // =================================
 
     const deleteBtn =
@@ -150,7 +228,8 @@ function addTask() {
 
     deleteBtn.textContent = "Delete";
 
-    deleteBtn.className = "delete-btn";
+    deleteBtn.className =
+        "delete-btn";
 
 
     // =================================
@@ -170,21 +249,34 @@ function addTask() {
 
 
     // =================================
-    // ADD ELEMENTS TO TASK CONTENT
+    // ADD ELEMENTS
     // =================================
 
-    taskContent.appendChild(checkbox);
+    taskContent.appendChild(
+        checkbox
+    );
 
-    taskContent.appendChild(taskText);
+    taskContent.appendChild(
+        taskText
+    );
 
 
-    // =================================
-    // ADD CONTENT TO LIST ITEM
-    // =================================
+    taskButtons.appendChild(
+        editBtn
+    );
 
-    li.appendChild(taskContent);
+    taskButtons.appendChild(
+        deleteBtn
+    );
 
-    li.appendChild(deleteBtn);
+
+    li.appendChild(
+        taskContent
+    );
+
+    li.appendChild(
+        taskButtons
+    );
 
 
     // =================================
@@ -206,7 +298,7 @@ function addTask() {
 
 
 // =====================================
-// ADD BUTTON CLICK
+// ADD BUTTON
 // =====================================
 
 addBtn.addEventListener(
@@ -216,7 +308,7 @@ addBtn.addEventListener(
 
 
 // =====================================
-// ENTER KEY SUPPORT
+// ENTER KEY
 // =====================================
 
 taskInput.addEventListener(

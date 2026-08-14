@@ -292,12 +292,57 @@ body {
 
 
 /* =====================================
+   BUTTON GROUP
+===================================== */
+
+.task-buttons {
+
+    display: flex;
+
+    gap: 6px;
+
+    flex-shrink: 0;
+
+}
+
+
+/* =====================================
+   EDIT BUTTON
+===================================== */
+
+.edit-btn {
+
+    padding: 8px 12px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: #555;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+}
+
+
+.edit-btn:hover {
+
+    background: #777;
+
+}
+
+
+/* =====================================
    DELETE BUTTON
 ===================================== */
 
 .delete-btn {
 
-    padding: 8px 13px;
+    padding: 8px 12px;
 
     border: none;
 
@@ -310,8 +355,6 @@ body {
     cursor: pointer;
 
     font-size: 14px;
-
-    flex-shrink: 0;
 
 }
 
@@ -345,7 +388,7 @@ body {
 
 
 /* =====================================
-   MOBILE RESPONSIVE
+   MOBILE
 ===================================== */
 
 @media (max-width: 500px) {
@@ -380,11 +423,19 @@ body {
 
     #taskList li {
 
-        padding: 10px;
+        align-items: flex-start;
 
     }
 
 
+    .task-buttons {
+
+        flex-direction: column;
+
+    }
+
+
+    .edit-btn,
     .delete-btn {
 
         padding: 7px 10px;
