@@ -11,6 +11,16 @@ const addBtn =
 const taskList =
     document.getElementById("taskList");
 
+const filterButtons =
+    document.querySelectorAll(".filter-btn");
+
+
+// =====================================
+// CURRENT FILTER
+// =====================================
+
+let currentFilter = "all";
+
 
 // =====================================
 // SHOW EMPTY MESSAGE
@@ -27,7 +37,7 @@ function showEmptyMessage() {
             "empty-message";
 
         message.textContent =
-            "📋 No tasks yet. Add a task!";
+            "📋 No tasks to display.";
 
         taskList.appendChild(message);
 
@@ -143,6 +153,8 @@ function addTask() {
 
             }
 
+            applyFilter();
+
         }
     );
 
@@ -170,10 +182,6 @@ function addTask() {
     editBtn.className = "edit-btn";
 
 
-    // =================================
-    // EDIT TASK
-    // =================================
-
     editBtn.addEventListener(
         "click",
         function () {
@@ -188,16 +196,12 @@ function addTask() {
                 );
 
 
-            // Cancel button pressed
-
             if (newTask === null) {
 
                 return;
 
             }
 
-
-            // Empty input
 
             if (newTask.trim() === "") {
 
@@ -209,8 +213,6 @@ function addTask() {
 
             }
 
-
-            // Update task
 
             taskText.textContent =
                 newTask.trim();
@@ -232,17 +234,13 @@ function addTask() {
         "delete-btn";
 
 
-    // =================================
-    // DELETE TASK
-    // =================================
-
     deleteBtn.addEventListener(
         "click",
         function () {
 
             li.remove();
 
-            showEmptyMessage();
+            applyFilter();
 
         }
     );
@@ -294,7 +292,191 @@ function addTask() {
 
     taskInput.focus();
 
+
+    // Apply current filter
+
+    applyFilter();
+
 }
+
+
+// =====================================
+// APPLY FILTER
+// =====================================
+
+function applyFilter() {
+
+    const tasks =
+        taskList.querySelectorAll(
+            "li:not(.empty-message)"
+        );
+
+
+    let visibleTasks = 0;
+
+
+    tasks.forEach(function (task) {
+
+        const checkbox =
+            task.querySelector(
+                'input[type="checkbox"]'
+            );
+
+
+        const completed =
+            checkbox.checked;
+
+
+        if (currentFilter === "all") {
+
+            task.style.display = "flex";
+
+            visibleTasks++;
+
+        }
+
+
+        else if (
+            currentFilter === "active"
+        ) {
+
+            if (completed) {
+
+                task.style.display = "none";
+
+            } else {
+
+                task.style.display = "flex";
+
+                visibleTasks++;
+
+            }
+
+        }
+
+
+        else if (
+            currentFilter === "completed"
+        ) {
+
+            if (completed) {
+
+                task.style.display = "flex";
+
+                visibleTasks++;
+
+            } else {
+
+                task.style.display = "none";
+
+            }
+
+        }
+
+    });
+
+
+    // Remove old empty message
+
+    const oldMessage =
+        document.querySelector(
+            ".empty-message"
+        );
+
+
+    if (oldMessage) {
+
+        oldMessage.remove();
+
+    }
+
+
+    // Show message if no tasks match
+
+    if (visibleTasks === 0) {
+
+        const message =
+            document.createElement("li");
+
+        message.className =
+            "empty-message";
+
+
+        if (currentFilter === "all") {
+
+            message.textContent =
+                "📋 No tasks yet. Add a task!";
+
+        }
+
+        else if (
+            currentFilter === "active"
+        ) {
+
+            message.textContent =
+                "🎉 No active tasks!";
+
+        }
+
+        else {
+
+            message.textContent =
+                "📋 No completed tasks yet.";
+
+        }
+
+
+        taskList.appendChild(message);
+
+    }
+
+}
+
+
+// =====================================
+// FILTER BUTTONS
+// =====================================
+
+filterButtons.forEach(function (button) {
+
+    button.addEventListener(
+        "click",
+        function () {
+
+            // Remove active class
+
+            filterButtons.forEach(
+                function (btn) {
+
+                    btn.classList.remove(
+                        "active-filter"
+                    );
+
+                }
+            );
+
+
+            // Add active class
+
+            button.classList.add(
+                "active-filter"
+            );
+
+
+            // Get selected filter
+
+            currentFilter =
+                button.dataset.filter;
+
+
+            // Apply filter
+
+            applyFilter();
+
+        }
+    );
+
+});
 
 
 // =====================================
@@ -326,7 +508,7 @@ taskInput.addEventListener(
 
 
 // =====================================
-// INITIAL MESSAGE
+// INITIAL DISPLAY
 // =====================================
 
-showEmptyMessage();
+applyFilter();

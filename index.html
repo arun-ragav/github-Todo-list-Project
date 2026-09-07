@@ -5,10 +5,7 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>G.K.G. Arun Ragav | To-Do List</title>
 
@@ -44,7 +41,7 @@
         </section>
 
 
-        <!-- Input -->
+        <!-- Add Task -->
 
         <div class="input-section">
 
@@ -62,9 +59,29 @@
         </div>
 
 
-        <!-- Tasks -->
+        <!-- Filters -->
+
+        <div class="filters">
+
+            <button class="filter-btn active-filter" data-filter="all">
+                All
+            </button>
+
+            <button class="filter-btn" data-filter="active">
+                Active
+            </button>
+
+            <button class="filter-btn" data-filter="completed">
+                Completed
+            </button>
+
+        </div>
+
+
+        <!-- Task List -->
 
         <ul id="taskList"></ul>
+
 
     </div>
 
