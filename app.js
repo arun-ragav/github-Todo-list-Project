@@ -16,88 +16,51 @@ const filterButtons =
 
 
 // =====================================
-// CURRENT FILTER
+// VARIABLES
 // =====================================
 
 let currentFilter = "all";
 
 
 // =====================================
-// SHOW EMPTY MESSAGE
+// LOAD TASKS FROM LOCAL STORAGE
 // =====================================
 
-function showEmptyMessage() {
+let tasks =
+    JSON.parse(localStorage.getItem("tasks")) || [];
 
-    if (taskList.children.length === 0) {
 
-        const message =
-            document.createElement("li");
+// =====================================
+// SAVE TASKS
+// =====================================
 
-        message.className =
-            "empty-message";
+function saveTasks() {
 
-        message.textContent =
-            "📋 No tasks to display.";
-
-        taskList.appendChild(message);
-
-    }
+    localStorage.setItem(
+        "tasks",
+        JSON.stringify(tasks)
+    );
 
 }
 
 
 // =====================================
-// REMOVE EMPTY MESSAGE
+// CREATE TASK
 // =====================================
 
-function removeEmptyMessage() {
-
-    const message =
-        document.querySelector(".empty-message");
-
-    if (message) {
-
-        message.remove();
-
-    }
-
-}
-
-
-// =====================================
-// ADD TASK
-// =====================================
-
-function addTask() {
-
-    const task =
-        taskInput.value.trim();
-
-
-    // Check empty input
-
-    if (task === "") {
-
-        alert("Please enter a task!");
-
-        taskInput.focus();
-
-        return;
-
-    }
-
-
-    // Remove empty message
-
-    removeEmptyMessage();
-
-
-    // =================================
-    // CREATE LIST ITEM
-    // =================================
+function createTask(task) {
 
     const li =
         document.createElement("li");
+
+
+    // Add completed class
+
+    if (task.completed) {
+
+        li.classList.add("task-completed");
+
+    }
 
 
     // =================================
@@ -120,6 +83,9 @@ function addTask() {
 
     checkbox.type = "checkbox";
 
+    checkbox.checked =
+        task.completed;
+
 
     // =================================
     // TASK TEXT
@@ -128,16 +94,30 @@ function addTask() {
     const taskText =
         document.createElement("span");
 
-    taskText.textContent = task;
+    taskText.textContent =
+        task.text;
+
+
+    if (task.completed) {
+
+        taskText.classList.add(
+            "completed"
+        );
+
+    }
 
 
     // =================================
-    // COMPLETE TASK
+    // CHECKBOX EVENT
     // =================================
 
     checkbox.addEventListener(
         "change",
         function () {
+
+            task.completed =
+                checkbox.checked;
+
 
             if (checkbox.checked) {
 
@@ -152,6 +132,9 @@ function addTask() {
                 );
 
             }
+
+
+            saveTasks();
 
             applyFilter();
 
@@ -179,20 +162,18 @@ function addTask() {
 
     editBtn.textContent = "Edit";
 
-    editBtn.className = "edit-btn";
+    editBtn.className =
+        "edit-btn";
 
 
     editBtn.addEventListener(
         "click",
         function () {
 
-            const currentTask =
-                taskText.textContent;
-
             const newTask =
                 prompt(
                     "Edit your task:",
-                    currentTask
+                    task.text
                 );
 
 
@@ -214,8 +195,15 @@ function addTask() {
             }
 
 
-            taskText.textContent =
+            task.text =
                 newTask.trim();
+
+
+            taskText.textContent =
+                task.text;
+
+
+            saveTasks();
 
         }
     );
@@ -238,9 +226,19 @@ function addTask() {
         "click",
         function () {
 
-            li.remove();
+            tasks =
+                tasks.filter(
+                    function (item) {
 
-            applyFilter();
+                        return item.id !== task.id;
+
+                    }
+                );
+
+
+            saveTasks();
+
+            renderTasks();
 
         }
     );
@@ -277,23 +275,33 @@ function addTask() {
     );
 
 
-    // =================================
-    // ADD TASK TO LIST
-    // =================================
+    return li;
 
-    taskList.appendChild(li);
+}
 
 
-    // =================================
-    // CLEAR INPUT
-    // =================================
+// =====================================
+// RENDER TASKS
+// =====================================
 
-    taskInput.value = "";
+function renderTasks() {
 
-    taskInput.focus();
+    taskList.innerHTML = "";
 
 
-    // Apply current filter
+    tasks.forEach(
+        function (task) {
+
+            const taskElement =
+                createTask(task);
+
+            taskList.appendChild(
+                taskElement
+            );
+
+        }
+    );
+
 
     applyFilter();
 
@@ -301,82 +309,141 @@ function addTask() {
 
 
 // =====================================
-// APPLY FILTER
+// ADD TASK
+// =====================================
+
+function addTask() {
+
+    const text =
+        taskInput.value.trim();
+
+
+    if (text === "") {
+
+        alert(
+            "Please enter a task!"
+        );
+
+        taskInput.focus();
+
+        return;
+
+    }
+
+
+    const newTask = {
+
+        id: Date.now(),
+
+        text: text,
+
+        completed: false
+
+    };
+
+
+    tasks.push(newTask);
+
+
+    saveTasks();
+
+
+    taskInput.value = "";
+
+
+    taskInput.focus();
+
+
+    renderTasks();
+
+}
+
+
+// =====================================
+// FILTER TASKS
 // =====================================
 
 function applyFilter() {
 
-    const tasks =
+    const taskElements =
         taskList.querySelectorAll(
-            "li:not(.empty-message)"
+            "li"
         );
 
 
     let visibleTasks = 0;
 
 
-    tasks.forEach(function (task) {
+    taskElements.forEach(
+        function (taskElement, index) {
 
-        const checkbox =
-            task.querySelector(
-                'input[type="checkbox"]'
-            );
-
-
-        const completed =
-            checkbox.checked;
+            const task =
+                tasks[index];
 
 
-        if (currentFilter === "all") {
+            if (!task) {
 
-            task.style.display = "flex";
+                return;
 
-            visibleTasks++;
-
-        }
+            }
 
 
-        else if (
-            currentFilter === "active"
-        ) {
+            if (currentFilter === "all") {
 
-            if (completed) {
-
-                task.style.display = "none";
-
-            } else {
-
-                task.style.display = "flex";
+                taskElement.style.display =
+                    "flex";
 
                 visibleTasks++;
 
             }
 
-        }
+
+            else if (
+                currentFilter === "active"
+            ) {
+
+                if (task.completed) {
+
+                    taskElement.style.display =
+                        "none";
+
+                } else {
+
+                    taskElement.style.display =
+                        "flex";
+
+                    visibleTasks++;
+
+                }
+
+            }
 
 
-        else if (
-            currentFilter === "completed"
-        ) {
+            else if (
+                currentFilter === "completed"
+            ) {
 
-            if (completed) {
+                if (task.completed) {
 
-                task.style.display = "flex";
+                    taskElement.style.display =
+                        "flex";
 
-                visibleTasks++;
+                    visibleTasks++;
 
-            } else {
+                } else {
 
-                task.style.display = "none";
+                    taskElement.style.display =
+                        "none";
+
+                }
 
             }
 
         }
+    );
 
-    });
 
-
-    // Remove old empty message
+    // Remove old message
 
     const oldMessage =
         document.querySelector(
@@ -391,7 +458,7 @@ function applyFilter() {
     }
 
 
-    // Show message if no tasks match
+    // Show message
 
     if (visibleTasks === 0) {
 
@@ -426,7 +493,9 @@ function applyFilter() {
         }
 
 
-        taskList.appendChild(message);
+        taskList.appendChild(
+            message
+        );
 
     }
 
@@ -437,46 +506,40 @@ function applyFilter() {
 // FILTER BUTTONS
 // =====================================
 
-filterButtons.forEach(function (button) {
+filterButtons.forEach(
+    function (button) {
 
-    button.addEventListener(
-        "click",
-        function () {
+        button.addEventListener(
+            "click",
+            function () {
 
-            // Remove active class
+                filterButtons.forEach(
+                    function (btn) {
 
-            filterButtons.forEach(
-                function (btn) {
+                        btn.classList.remove(
+                            "active-filter"
+                        );
 
-                    btn.classList.remove(
-                        "active-filter"
-                    );
-
-                }
-            );
-
-
-            // Add active class
-
-            button.classList.add(
-                "active-filter"
-            );
+                    }
+                );
 
 
-            // Get selected filter
+                button.classList.add(
+                    "active-filter"
+                );
 
-            currentFilter =
-                button.dataset.filter;
+
+                currentFilter =
+                    button.dataset.filter;
 
 
-            // Apply filter
+                applyFilter();
 
-            applyFilter();
+            }
+        );
 
-        }
-    );
-
-});
+    }
+);
 
 
 // =====================================
@@ -508,7 +571,7 @@ taskInput.addEventListener(
 
 
 // =====================================
-// INITIAL DISPLAY
+// LOAD SAVED TASKS
 // =====================================
 
-applyFilter();
+renderTasks();
