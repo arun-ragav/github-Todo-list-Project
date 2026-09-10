@@ -14,6 +14,15 @@ const taskList =
 const filterButtons =
     document.querySelectorAll(".filter-btn");
 
+const totalCount =
+    document.getElementById("totalCount");
+
+const activeCount =
+    document.getElementById("activeCount");
+
+const completedCount =
+    document.getElementById("completedCount");
+
 
 // =====================================
 // VARIABLES
@@ -23,11 +32,13 @@ let currentFilter = "all";
 
 
 // =====================================
-// LOAD TASKS FROM LOCAL STORAGE
+// LOAD TASKS
 // =====================================
 
 let tasks =
-    JSON.parse(localStorage.getItem("tasks")) || [];
+    JSON.parse(
+        localStorage.getItem("tasks")
+    ) || [];
 
 
 // =====================================
@@ -45,22 +56,97 @@ function saveTasks() {
 
 
 // =====================================
-// CREATE TASK
+// UPDATE COUNTERS
 // =====================================
 
-function createTask(task) {
+function updateCounters() {
+
+    const total = tasks.length;
+
+    const completed =
+        tasks.filter(
+            function (task) {
+
+                return task.completed;
+
+            }
+        ).length;
+
+
+    const active =
+        total - completed;
+
+
+    totalCount.textContent =
+        total;
+
+    activeCount.textContent =
+        active;
+
+    completedCount.textContent =
+        completed;
+
+}
+
+
+// =====================================
+// ADD TASK
+// =====================================
+
+function addTask() {
+
+    const text =
+        taskInput.value.trim();
+
+
+    if (text === "") {
+
+        alert(
+            "Please enter a task!"
+        );
+
+        taskInput.focus();
+
+        return;
+
+    }
+
+
+    const newTask = {
+
+        id: Date.now(),
+
+        text: text,
+
+        completed: false
+
+    };
+
+
+    tasks.push(newTask);
+
+
+    saveTasks();
+
+
+    taskInput.value = "";
+
+    taskInput.focus();
+
+
+    renderTasks();
+
+}
+
+
+// =====================================
+// CREATE TASK ELEMENT
+// =====================================
+
+function createTaskElement(task) {
 
     const li =
         document.createElement("li");
-
-
-    // Add completed class
-
-    if (task.completed) {
-
-        li.classList.add("task-completed");
-
-    }
 
 
     // =================================
@@ -119,24 +205,9 @@ function createTask(task) {
                 checkbox.checked;
 
 
-            if (checkbox.checked) {
-
-                taskText.classList.add(
-                    "completed"
-                );
-
-            } else {
-
-                taskText.classList.remove(
-                    "completed"
-                );
-
-            }
-
-
             saveTasks();
 
-            applyFilter();
+            renderTasks();
 
         }
     );
@@ -170,21 +241,21 @@ function createTask(task) {
         "click",
         function () {
 
-            const newTask =
+            const newText =
                 prompt(
                     "Edit your task:",
                     task.text
                 );
 
 
-            if (newTask === null) {
+            if (newText === null) {
 
                 return;
 
             }
 
 
-            if (newTask.trim() === "") {
+            if (newText.trim() === "") {
 
                 alert(
                     "Task cannot be empty!"
@@ -196,14 +267,12 @@ function createTask(task) {
 
 
             task.text =
-                newTask.trim();
-
-
-            taskText.textContent =
-                task.text;
+                newText.trim();
 
 
             saveTasks();
+
+            renderTasks();
 
         }
     );
@@ -216,7 +285,8 @@ function createTask(task) {
     const deleteBtn =
         document.createElement("button");
 
-    deleteBtn.textContent = "Delete";
+    deleteBtn.textContent =
+        "Delete";
 
     deleteBtn.className =
         "delete-btn";
@@ -245,7 +315,7 @@ function createTask(task) {
 
 
     // =================================
-    // ADD ELEMENTS
+    // APPEND ELEMENTS
     // =================================
 
     taskContent.appendChild(
@@ -275,7 +345,7 @@ function createTask(task) {
     );
 
 
-    return li;
+    taskList.appendChild(li);
 
 }
 
@@ -289,178 +359,41 @@ function renderTasks() {
     taskList.innerHTML = "";
 
 
-    tasks.forEach(
-        function (task) {
+    const filteredTasks =
+        tasks.filter(
+            function (task) {
 
-            const taskElement =
-                createTask(task);
+                if (
+                    currentFilter ===
+                    "active"
+                ) {
 
-            taskList.appendChild(
-                taskElement
-            );
-
-        }
-    );
-
-
-    applyFilter();
-
-}
-
-
-// =====================================
-// ADD TASK
-// =====================================
-
-function addTask() {
-
-    const text =
-        taskInput.value.trim();
-
-
-    if (text === "") {
-
-        alert(
-            "Please enter a task!"
-        );
-
-        taskInput.focus();
-
-        return;
-
-    }
-
-
-    const newTask = {
-
-        id: Date.now(),
-
-        text: text,
-
-        completed: false
-
-    };
-
-
-    tasks.push(newTask);
-
-
-    saveTasks();
-
-
-    taskInput.value = "";
-
-
-    taskInput.focus();
-
-
-    renderTasks();
-
-}
-
-
-// =====================================
-// FILTER TASKS
-// =====================================
-
-function applyFilter() {
-
-    const taskElements =
-        taskList.querySelectorAll(
-            "li"
-        );
-
-
-    let visibleTasks = 0;
-
-
-    taskElements.forEach(
-        function (taskElement, index) {
-
-            const task =
-                tasks[index];
-
-
-            if (!task) {
-
-                return;
-
-            }
-
-
-            if (currentFilter === "all") {
-
-                taskElement.style.display =
-                    "flex";
-
-                visibleTasks++;
-
-            }
-
-
-            else if (
-                currentFilter === "active"
-            ) {
-
-                if (task.completed) {
-
-                    taskElement.style.display =
-                        "none";
-
-                } else {
-
-                    taskElement.style.display =
-                        "flex";
-
-                    visibleTasks++;
+                    return !task.completed;
 
                 }
 
-            }
 
+                if (
+                    currentFilter ===
+                    "completed"
+                ) {
 
-            else if (
-                currentFilter === "completed"
-            ) {
-
-                if (task.completed) {
-
-                    taskElement.style.display =
-                        "flex";
-
-                    visibleTasks++;
-
-                } else {
-
-                    taskElement.style.display =
-                        "none";
+                    return task.completed;
 
                 }
 
+
+                return true;
+
             }
-
-        }
-    );
-
-
-    // Remove old message
-
-    const oldMessage =
-        document.querySelector(
-            ".empty-message"
         );
 
 
-    if (oldMessage) {
+    // =================================
+    // EMPTY MESSAGE
+    // =================================
 
-        oldMessage.remove();
-
-    }
-
-
-    // Show message
-
-    if (visibleTasks === 0) {
+    if (filteredTasks.length === 0) {
 
         const message =
             document.createElement("li");
@@ -499,6 +432,24 @@ function applyFilter() {
 
     }
 
+
+    // =================================
+    // DISPLAY TASKS
+    // =================================
+
+    filteredTasks.forEach(
+        function (task) {
+
+            createTaskElement(task);
+
+        }
+    );
+
+
+    // Update counters
+
+    updateCounters();
+
 }
 
 
@@ -533,7 +484,7 @@ filterButtons.forEach(
                     button.dataset.filter;
 
 
-                applyFilter();
+                renderTasks();
 
             }
         );
@@ -571,7 +522,7 @@ taskInput.addEventListener(
 
 
 // =====================================
-// LOAD SAVED TASKS
+// INITIAL LOAD
 // =====================================
 
 renderTasks();
