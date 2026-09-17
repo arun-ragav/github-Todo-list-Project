@@ -1,44 +1,55 @@
 // =====================================
-// GET HTML ELEMENTS
+// DARK / LIGHT MODE
 // =====================================
 
-const taskInput =
-    document.getElementById("taskInput");
+const themeBtn = document.getElementById("themeBtn");
 
-const addBtn =
-    document.getElementById("addBtn");
 
-const taskList =
-    document.getElementById("taskList");
+// Check saved theme
 
-const filterButtons =
-    document.querySelectorAll(".filter-btn");
+if (localStorage.getItem("theme") === "dark") {
 
-const totalCount =
-    document.getElementById("totalCount");
+    document.body.classList.add("dark-mode");
 
-const activeCount =
-    document.getElementById("activeCount");
+    themeBtn.textContent = "☀️ Light Mode";
 
-const completedCount =
-    document.getElementById("completedCount");
+}
+
+
+// Theme button
+
+themeBtn.addEventListener("click", function () {
+
+    document.body.classList.toggle("dark-mode");
+
+
+    if (document.body.classList.contains("dark-mode")) {
+
+        localStorage.setItem("theme", "dark");
+
+        themeBtn.textContent = "☀️ Light Mode";
+
+    } else {
+
+        localStorage.setItem("theme", "light");
+
+        themeBtn.textContent = "🌙 Dark Mode";
+
+    }
+
+});
 
 
 // =====================================
-// VARIABLES
+// TODO LIST
 // =====================================
 
 let currentFilter = "all";
 
 
-// =====================================
-// LOAD TASKS
-// =====================================
+// Get saved tasks
 
-let tasks =
-    JSON.parse(
-        localStorage.getItem("tasks")
-    ) || [];
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
 
 // =====================================
@@ -47,10 +58,7 @@ let tasks =
 
 function saveTasks() {
 
-    localStorage.setItem(
-        "tasks",
-        JSON.stringify(tasks)
-    );
+    localStorage.setItem("tasks", JSON.stringify(tasks));
 
 }
 
@@ -63,28 +71,18 @@ function updateCounters() {
 
     const total = tasks.length;
 
-    const completed =
-        tasks.filter(
-            function (task) {
+    const completed = tasks.filter(
+        task => task.completed
+    ).length;
 
-                return task.completed;
-
-            }
-        ).length;
+    const active = total - completed;
 
 
-    const active =
-        total - completed;
+    document.getElementById("totalCount").textContent = total;
 
+    document.getElementById("activeCount").textContent = active;
 
-    totalCount.textContent =
-        total;
-
-    activeCount.textContent =
-        active;
-
-    completedCount.textContent =
-        completed;
+    document.getElementById("completedCount").textContent = completed;
 
 }
 
@@ -95,17 +93,14 @@ function updateCounters() {
 
 function addTask() {
 
-    const text =
-        taskInput.value.trim();
+    const taskInput = document.getElementById("taskInput");
+
+    const text = taskInput.value.trim();
 
 
     if (text === "") {
 
-        alert(
-            "Please enter a task!"
-        );
-
-        taskInput.focus();
+        alert("Please enter a task!");
 
         return;
 
@@ -128,11 +123,7 @@ function addTask() {
 
     saveTasks();
 
-
     taskInput.value = "";
-
-    taskInput.focus();
-
 
     renderTasks();
 
@@ -145,308 +136,179 @@ function addTask() {
 
 function createTaskElement(task) {
 
-    const li =
-        document.createElement("li");
+    const li = document.createElement("li");
 
-
-    // =================================
-    // TASK CONTENT
-    // =================================
-
-    const taskContent =
-        document.createElement("div");
-
-    taskContent.className =
-        "task-content";
-
-
-    // =================================
-    // CHECKBOX
-    // =================================
-
-    const checkbox =
-        document.createElement("input");
-
-    checkbox.type = "checkbox";
-
-    checkbox.checked =
-        task.completed;
-
-
-    // =================================
-    // TASK TEXT
-    // =================================
-
-    const taskText =
-        document.createElement("span");
-
-    taskText.textContent =
-        task.text;
+    li.className = "task";
 
 
     if (task.completed) {
 
-        taskText.classList.add(
-            "completed"
-        );
+        li.classList.add("completed");
 
     }
 
 
-    // =================================
-    // CHECKBOX EVENT
-    // =================================
+    // Checkbox
 
-    checkbox.addEventListener(
-        "change",
-        function () {
+    const checkbox = document.createElement("input");
 
-            task.completed =
-                checkbox.checked;
+    checkbox.type = "checkbox";
 
+    checkbox.className = "task-checkbox";
 
-            saveTasks();
-
-            renderTasks();
-
-        }
-    );
+    checkbox.checked = task.completed;
 
 
-    // =================================
-    // BUTTON GROUP
-    // =================================
+    checkbox.addEventListener("change", function () {
 
-    const taskButtons =
-        document.createElement("div");
+        task.completed = checkbox.checked;
 
-    taskButtons.className =
-        "task-buttons";
+        saveTasks();
 
+        renderTasks();
 
-    // =================================
-    // EDIT BUTTON
-    // =================================
-
-    const editBtn =
-        document.createElement("button");
-
-    editBtn.textContent = "Edit";
-
-    editBtn.className =
-        "edit-btn";
+    });
 
 
-    editBtn.addEventListener(
-        "click",
-        function () {
+    // Task text
 
-            const newText =
-                prompt(
-                    "Edit your task:",
-                    task.text
-                );
+    const span = document.createElement("span");
+
+    span.className = "task-text";
+
+    span.textContent = task.text;
 
 
-            if (newText === null) {
+    // Edit button
 
-                return;
+    const editButton = document.createElement("button");
 
-            }
+    editButton.textContent = "Edit";
 
-
-            if (newText.trim() === "") {
-
-                alert(
-                    "Task cannot be empty!"
-                );
-
-                return;
-
-            }
+    editButton.className = "edit-btn";
 
 
-            task.text =
-                newText.trim();
+    editButton.addEventListener("click", function () {
 
+        const newText = prompt(
+            "Edit your task:",
+            task.text
+        );
+
+
+        if (newText !== null && newText.trim() !== "") {
+
+            task.text = newText.trim();
 
             saveTasks();
 
             renderTasks();
 
         }
-    );
+
+    });
 
 
-    // =================================
-    // DELETE BUTTON
-    // =================================
+    // Delete button
 
-    const deleteBtn =
-        document.createElement("button");
+    const deleteButton = document.createElement("button");
 
-    deleteBtn.textContent =
-        "Delete";
+    deleteButton.textContent = "Delete";
 
-    deleteBtn.className =
-        "delete-btn";
+    deleteButton.className = "delete-btn";
 
 
-    deleteBtn.addEventListener(
-        "click",
-        function () {
+    deleteButton.addEventListener("click", function () {
 
-            tasks =
-                tasks.filter(
-                    function (item) {
+        const confirmDelete = confirm(
+            "Are you sure you want to delete this task?"
+        );
 
-                        return item.id !== task.id;
 
-                    }
-                );
+        if (confirmDelete) {
 
+            tasks = tasks.filter(
+                item => item.id !== task.id
+            );
 
             saveTasks();
 
             renderTasks();
 
         }
-    );
+
+    });
 
 
-    // =================================
-    // APPEND ELEMENTS
-    // =================================
+    li.appendChild(checkbox);
 
-    taskContent.appendChild(
-        checkbox
-    );
+    li.appendChild(span);
 
-    taskContent.appendChild(
-        taskText
-    );
+    li.appendChild(editButton);
+
+    li.appendChild(deleteButton);
 
 
-    taskButtons.appendChild(
-        editBtn
-    );
-
-    taskButtons.appendChild(
-        deleteBtn
-    );
-
-
-    li.appendChild(
-        taskContent
-    );
-
-    li.appendChild(
-        taskButtons
-    );
-
-
-    taskList.appendChild(li);
+    return li;
 
 }
 
 
 // =====================================
-// RENDER TASKS
+// DISPLAY TASKS
 // =====================================
 
 function renderTasks() {
 
+    const taskList = document.getElementById("taskList");
+
     taskList.innerHTML = "";
 
 
-    const filteredTasks =
-        tasks.filter(
-            function (task) {
-
-                if (
-                    currentFilter ===
-                    "active"
-                ) {
-
-                    return !task.completed;
-
-                }
+    let filteredTasks = tasks;
 
 
-                if (
-                    currentFilter ===
-                    "completed"
-                ) {
+    // All tasks
 
-                    return task.completed;
+    if (currentFilter === "all") {
 
-                }
+        filteredTasks = tasks;
 
-
-                return true;
-
-            }
-        );
+    }
 
 
-    // =================================
-    // EMPTY MESSAGE
-    // =================================
+    // Active tasks
 
-    if (filteredTasks.length === 0) {
+    else if (currentFilter === "active") {
 
-        const message =
-            document.createElement("li");
-
-        message.className =
-            "empty-message";
-
-
-        if (currentFilter === "all") {
-
-            message.textContent =
-                "📋 No tasks yet. Add a task!";
-
-        }
-
-        else if (
-            currentFilter === "active"
-        ) {
-
-            message.textContent =
-                "🎉 No active tasks!";
-
-        }
-
-        else {
-
-            message.textContent =
-                "📋 No completed tasks yet.";
-
-        }
-
-
-        taskList.appendChild(
-            message
+        filteredTasks = tasks.filter(
+            task => !task.completed
         );
 
     }
 
 
-    // =================================
-    // DISPLAY TASKS
-    // =================================
+    // Completed tasks
 
-    filteredTasks.forEach(
-        function (task) {
+    else if (currentFilter === "completed") {
 
-            createTaskElement(task);
+        filteredTasks = tasks.filter(
+            task => task.completed
+        );
 
-        }
-    );
+    }
 
 
-    // Update counters
+    // Display tasks
+
+    filteredTasks.forEach(function (task) {
+
+        const taskElement = createTaskElement(task);
+
+        taskList.appendChild(taskElement);
+
+    });
+
 
     updateCounters();
 
@@ -457,47 +319,44 @@ function renderTasks() {
 // FILTER BUTTONS
 // =====================================
 
-filterButtons.forEach(
-    function (button) {
-
-        button.addEventListener(
-            "click",
-            function () {
-
-                filterButtons.forEach(
-                    function (btn) {
-
-                        btn.classList.remove(
-                            "active-filter"
-                        );
-
-                    }
-                );
-
-
-                button.classList.add(
-                    "active-filter"
-                );
-
-
-                currentFilter =
-                    button.dataset.filter;
-
-
-                renderTasks();
-
-            }
-        );
-
-    }
+const filterButtons = document.querySelectorAll(
+    ".filter-btn"
 );
+
+
+filterButtons.forEach(function (button) {
+
+    button.addEventListener("click", function () {
+
+        currentFilter = button.dataset.filter;
+
+
+        // Remove active class
+
+        filterButtons.forEach(function (btn) {
+
+            btn.classList.remove("active-filter");
+
+        });
+
+
+        // Add active class
+
+        button.classList.add("active-filter");
+
+
+        renderTasks();
+
+    });
+
+});
 
 
 // =====================================
 // ADD BUTTON
 // =====================================
 
-addBtn.addEventListener(
+document.getElementById("addBtn").addEventListener(
     "click",
     addTask
 );
@@ -507,7 +366,7 @@ addBtn.addEventListener(
 // ENTER KEY
 // =====================================
 
-taskInput.addEventListener(
+document.getElementById("taskInput").addEventListener(
     "keydown",
     function (event) {
 
@@ -522,7 +381,7 @@ taskInput.addEventListener(
 
 
 // =====================================
-// INITIAL LOAD
+// INITIAL DISPLAY
 // =====================================
 
 renderTasks();

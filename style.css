@@ -1,23 +1,20 @@
 /* =====================================
-   RESET
+   GENERAL
 ===================================== */
 
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
-
-
-/* =====================================
-   BODY
-===================================== */
 
 body {
 
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, sans-serif;
 
     background: #f2f2f2;
+
+    color: #222;
 
     min-height: 100vh;
 
@@ -27,7 +24,9 @@ body {
 
     align-items: center;
 
-    padding: 20px;
+    padding: 30px;
+
+    transition: 0.3s;
 
 }
 
@@ -40,16 +39,17 @@ body {
 
     width: 100%;
 
-    max-width: 650px;
+    max-width: 750px;
 
     background: white;
 
-    padding: 30px;
+    padding: 35px;
 
-    border-radius: 18px;
+    border-radius: 20px;
 
-    box-shadow:
-        0 8px 25px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+    transition: 0.3s;
 
 }
 
@@ -62,25 +62,56 @@ body {
 
     text-align: center;
 
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 
 }
 
-
 .header h1 {
 
-    font-size: 30px;
+    font-size: 32px;
 
     margin-bottom: 8px;
 
 }
 
-
 .header p {
 
-    color: #777;
+    color: #666;
 
-    font-size: 15px;
+    font-size: 16px;
+
+}
+
+
+/* =====================================
+   THEME BUTTON
+===================================== */
+
+#themeBtn {
+
+    margin-top: 15px;
+
+    padding: 10px 18px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #333;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    transition: 0.3s;
+
+}
+
+#themeBtn:hover {
+
+    transform: scale(1.05);
 
 }
 
@@ -93,18 +124,17 @@ body {
 
     text-align: center;
 
-    padding: 15px;
-
-    margin-bottom: 20px;
-
     background: #f7f7f7;
 
-    border-radius: 12px;
-}
+    padding: 20px;
 
-    /* =====================================
-   PROFILE IMAGE
-===================================== */
+    border-radius: 15px;
+
+    margin-bottom: 25px;
+
+    transition: 0.3s;
+
+}
 
 .profile-image {
 
@@ -124,25 +154,19 @@ body {
 
 }
 
-
-
-
 .profile h2 {
 
-    font-size: 20px;
+    margin-bottom: 7px;
 
-    margin-bottom: 5px;
+    font-size: 24px;
 
 }
-
 
 .profile p {
 
     color: #666;
 
-    font-size: 14px;
-
-    margin-top: 3px;
+    margin-top: 5px;
 
 }
 
@@ -155,48 +179,41 @@ body {
 
     display: flex;
 
-    gap: 10px;
+    gap: 12px;
 
-    margin-bottom: 15px;
+    margin-bottom: 18px;
 
 }
-
 
 #taskInput {
 
     flex: 1;
 
-    padding: 13px;
+    padding: 15px;
 
     border: 1px solid #ccc;
 
-    border-radius: 8px;
-
-    outline: none;
+    border-radius: 10px;
 
     font-size: 16px;
 
-}
+    outline: none;
 
+}
 
 #taskInput:focus {
 
-    border-color: #333;
+    border: 2px solid #333;
 
 }
 
-
-/* =====================================
-   ADD BUTTON
-===================================== */
-
 #addBtn {
 
-    padding: 13px 22px;
+    padding: 0 25px;
 
     border: none;
 
-    border-radius: 8px;
+    border-radius: 10px;
 
     background: #333;
 
@@ -206,18 +223,19 @@ body {
 
     cursor: pointer;
 
-}
+    transition: 0.3s;
 
+}
 
 #addBtn:hover {
 
-    background: #555;
+    transform: scale(1.05);
 
 }
 
 
 /* =====================================
-   FILTERS
+   FILTER BUTTONS
 ===================================== */
 
 .filters {
@@ -226,24 +244,23 @@ body {
 
     justify-content: center;
 
-    gap: 8px;
+    gap: 10px;
 
-    margin-bottom: 15px;
+    margin-bottom: 18px;
 
 }
 
-
 .filter-btn {
 
-    padding: 8px 15px;
+    padding: 10px 20px;
 
     border: 1px solid #ccc;
 
-    border-radius: 7px;
+    border-radius: 8px;
 
     background: white;
 
-    color: #555;
+    color: #333;
 
     cursor: pointer;
 
@@ -251,21 +268,19 @@ body {
 
 }
 
-
 .filter-btn:hover {
-
-    background: #eee;
-
-}
-
-
-.filter-btn.active-filter {
 
     background: #333;
 
     color: white;
 
-    border-color: #333;
+}
+
+.active-filter {
+
+    background: #333;
+
+    color: white;
 
 }
 
@@ -276,48 +291,45 @@ body {
 
 .stats {
 
-    display: flex;
+    display: grid;
 
-    gap: 10px;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 12px;
 
     margin-bottom: 20px;
 
 }
 
-
 .stat-box {
-
-    flex: 1;
 
     text-align: center;
 
     background: #f5f5f5;
 
-    padding: 12px;
+    padding: 15px;
 
-    border-radius: 10px;
+    border-radius: 12px;
+
+    transition: 0.3s;
 
 }
-
 
 .stat-box span {
 
     display: block;
 
-    font-size: 22px;
+    font-size: 24px;
 
     font-weight: bold;
 
-}
+    margin-bottom: 5px;
 
+}
 
 .stat-box p {
 
-    margin-top: 4px;
-
-    color: #777;
-
-    font-size: 13px;
+    color: #666;
 
 }
 
@@ -333,70 +345,57 @@ body {
 }
 
 
-#taskList li {
+/* =====================================
+   TASK
+===================================== */
+
+.task {
 
     display: flex;
 
-    justify-content: space-between;
-
     align-items: center;
 
-    gap: 10px;
+    gap: 12px;
 
-    padding: 13px;
+    background: #f7f7f7;
+
+    padding: 14px;
 
     margin-bottom: 10px;
 
-    background: #f5f5f5;
-
-    border-radius: 8px;
+    border-radius: 10px;
 
     border-left: 4px solid #333;
 
+    transition: 0.3s;
+
 }
 
+.task:hover {
 
-/* =====================================
-   TASK CONTENT
-===================================== */
-
-.task-content {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    flex: 1;
-
-    min-width: 0;
+    transform: translateX(3px);
 
 }
 
 
-/* =====================================
-   CHECKBOX
-===================================== */
+/* CHECKBOX */
 
-.task-content input {
+.task-checkbox {
 
-    width: 18px;
+    width: 20px;
 
-    height: 18px;
+    height: 20px;
 
     cursor: pointer;
 
-    flex-shrink: 0;
-
 }
 
 
-/* =====================================
-   TASK TEXT
-===================================== */
+/* TASK TEXT */
 
-.task-content span {
+.task-text {
+
+    flex: 1;
 
     font-size: 16px;
 
@@ -405,11 +404,9 @@ body {
 }
 
 
-/* =====================================
-   COMPLETED TASK
-===================================== */
+/* COMPLETED TASK */
 
-.task-content span.completed {
+.completed .task-text {
 
     text-decoration: line-through;
 
@@ -419,70 +416,38 @@ body {
 
 
 /* =====================================
-   BUTTON GROUP
+   TASK BUTTONS
 ===================================== */
 
-.task-buttons {
+.task button {
 
-    display: flex;
+    border: none;
 
-    gap: 6px;
+    padding: 9px 12px;
 
-    flex-shrink: 0;
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    color: white;
+
+    font-size: 13px;
 
 }
-
-
-/* =====================================
-   EDIT BUTTON
-===================================== */
 
 .edit-btn {
 
-    padding: 8px 12px;
-
-    border: none;
-
-    border-radius: 6px;
-
     background: #555;
 
-    color: white;
-
-    cursor: pointer;
-
 }
-
-
-.edit-btn:hover {
-
-    background: #777;
-
-}
-
-
-/* =====================================
-   DELETE BUTTON
-===================================== */
 
 .delete-btn {
 
-    padding: 8px 12px;
-
-    border: none;
-
-    border-radius: 6px;
-
-    background: #d9534f;
-
-    color: white;
-
-    cursor: pointer;
+    background: #e74c3c;
 
 }
 
-
-.delete-btn:hover {
+.task button:hover {
 
     opacity: 0.8;
 
@@ -490,31 +455,137 @@ body {
 
 
 /* =====================================
-   EMPTY MESSAGE
+   DARK MODE
 ===================================== */
 
-.empty-message {
+body.dark-mode {
 
-    display: block !important;
+    background-color: #121212;
 
-    text-align: center;
+    color: white;
 
-    color: #888;
+}
 
-    background: transparent !important;
+body.dark-mode .container {
 
-    border-left: none !important;
+    background-color: #1e1e1e;
 
-    padding: 20px !important;
+}
+
+body.dark-mode .header h1 {
+
+    color: white;
+
+}
+
+body.dark-mode .header p {
+
+    color: #ccc;
+
+}
+
+body.dark-mode .profile {
+
+    background-color: #2a2a2a;
+
+    color: white;
+
+}
+
+body.dark-mode .profile h2 {
+
+    color: white;
+
+}
+
+body.dark-mode .profile p {
+
+    color: #ccc;
+
+}
+
+body.dark-mode #taskInput {
+
+    background-color: #333;
+
+    color: white;
+
+    border: 1px solid #777;
+
+}
+
+body.dark-mode #taskInput::placeholder {
+
+    color: #ccc;
+
+}
+
+body.dark-mode .filter-btn {
+
+    background-color: #333;
+
+    color: white;
+
+    border-color: #666;
+
+}
+
+body.dark-mode .active-filter {
+
+    background-color: white;
+
+    color: #222;
+
+}
+
+body.dark-mode .stat-box {
+
+    background-color: #333;
+
+    color: white;
+
+}
+
+body.dark-mode .stat-box p {
+
+    color: #ccc;
+
+}
+
+body.dark-mode .task {
+
+    background-color: #333;
+
+    color: white;
+
+}
+
+body.dark-mode .task-text {
+
+    color: white;
+
+}
+
+body.dark-mode #themeBtn {
+
+    background-color: white;
+
+    color: #222;
 
 }
 
 
 /* =====================================
-   MOBILE
+   MOBILE RESPONSIVE
 ===================================== */
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
+
+    body {
+
+        padding: 15px;
+
+    }
 
     .container {
 
@@ -522,13 +593,11 @@ body {
 
     }
 
-
     .header h1 {
 
-        font-size: 24px;
+        font-size: 26px;
 
     }
-
 
     .input-section {
 
@@ -536,52 +605,21 @@ body {
 
     }
 
-
     #addBtn {
 
-        width: 100%;
+        padding: 12px;
 
     }
-
-
-    .filters {
-
-        flex-wrap: wrap;
-
-    }
-
 
     .stats {
 
-        gap: 5px;
+        grid-template-columns: 1fr;
 
     }
 
+    .task {
 
-    .stat-box {
-
-        padding: 10px 5px;
-
-    }
-
-
-    .stat-box span {
-
-        font-size: 19px;
-
-    }
-
-
-    #taskList li {
-
-        align-items: flex-start;
-
-    }
-
-
-    .task-buttons {
-
-        flex-direction: column;
+        flex-wrap: wrap;
 
     }
 

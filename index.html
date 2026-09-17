@@ -5,10 +5,7 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>G.K.G. Arun Ragav | To-Do List</title>
 
@@ -20,7 +17,7 @@
 
     <div class="container">
 
-        <!-- Header -->
+        <!-- HEADER -->
 
         <header class="header">
 
@@ -28,31 +25,31 @@
 
             <p>Organize your daily tasks</p>
 
+            <button id="themeBtn">🌙 Dark Mode</button>
+
         </header>
 
 
-        <!-- Profile -->
+        <!-- PROFILE -->
 
-        <!-- Profile -->
+        <section class="profile">
 
-<section class="profile">
+            <img
+                src="G.K.G.Arun Ragav.png"
+                alt="G.K.G. Arun Ragav"
+                class="profile-image"
+            >
 
-    <img
-        src="G.K.G.Arun Ragav.png"
-        alt="G.K.G. Arun Ragav"
-        class="profile-image"
-    >
+            <h2>G.K.G. Arun Ragav</h2>
 
-    <h2>G.K.G. Arun Ragav</h2>
+            <p>B.Tech CSE (Applied AI)</p>
 
-    <p>B.Tech CSE (Applied AI)</p>
+            <p>St. Joseph University, Palanchur</p>
 
-    <p>St. Joseph University, Palanchur</p>
-
-</section>
+        </section>
 
 
-        <!-- Add Task -->
+        <!-- ADD TASK -->
 
         <div class="input-section">
 
@@ -63,42 +60,37 @@
                 autocomplete="off"
             >
 
-            <button id="addBtn">
-                Add
-            </button>
+            <button id="addBtn">Add</button>
 
         </div>
 
 
-        <!-- Filters -->
+        <!-- FILTERS -->
 
         <div class="filters">
 
             <button
                 class="filter-btn active-filter"
-                data-filter="all"
-            >
+                data-filter="all">
                 All
             </button>
 
             <button
                 class="filter-btn"
-                data-filter="active"
-            >
+                data-filter="active">
                 Active
             </button>
 
             <button
                 class="filter-btn"
-                data-filter="completed"
-            >
+                data-filter="completed">
                 Completed
             </button>
 
         </div>
 
 
-        <!-- Task Statistics -->
+        <!-- STATISTICS -->
 
         <div class="stats">
 
@@ -131,10 +123,9 @@
         </div>
 
 
-        <!-- Task List -->
+        <!-- TASK LIST -->
 
         <ul id="taskList"></ul>
-
 
     </div>
 
