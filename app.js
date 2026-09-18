@@ -95,6 +95,11 @@ function addTask() {
 
     const taskInput = document.getElementById("taskInput");
 
+    const taskDate = document.getElementById("taskDate");
+
+    const taskTime = document.getElementById("taskTime");
+
+
     const text = taskInput.value.trim();
 
 
@@ -113,6 +118,10 @@ function addTask() {
 
         text: text,
 
+        date: taskDate.value,
+
+        time: taskTime.value,
+
         completed: false
 
     };
@@ -123,7 +132,13 @@ function addTask() {
 
     saveTasks();
 
+
     taskInput.value = "";
+
+    taskDate.value = "";
+
+    taskTime.value = "";
+
 
     renderTasks();
 
@@ -170,6 +185,13 @@ function createTaskElement(task) {
     });
 
 
+    // Task content
+
+    const content = document.createElement("div");
+
+    content.className = "task-content";
+
+
     // Task text
 
     const span = document.createElement("span");
@@ -179,7 +201,49 @@ function createTaskElement(task) {
     span.textContent = task.text;
 
 
-    // Edit button
+    // Date and time
+
+    const dateInfo = document.createElement("small");
+
+    dateInfo.className = "task-date";
+
+
+    if (task.date || task.time) {
+
+        let dateText = "";
+
+
+        if (task.date) {
+
+            dateText += "📅 " + task.date;
+
+        }
+
+
+        if (task.time) {
+
+            dateText += "  ⏰ " + task.time;
+
+        }
+
+
+        dateInfo.textContent = dateText;
+
+    } else {
+
+        dateInfo.textContent = "No due date";
+
+    }
+
+
+    content.appendChild(span);
+
+    content.appendChild(dateInfo);
+
+
+    // =====================================
+    // EDIT BUTTON
+    // =====================================
 
     const editButton = document.createElement("button");
 
@@ -196,7 +260,10 @@ function createTaskElement(task) {
         );
 
 
-        if (newText !== null && newText.trim() !== "") {
+        if (
+            newText !== null &&
+            newText.trim() !== ""
+        ) {
 
             task.text = newText.trim();
 
@@ -209,7 +276,9 @@ function createTaskElement(task) {
     });
 
 
-    // Delete button
+    // =====================================
+    // DELETE BUTTON
+    // =====================================
 
     const deleteButton = document.createElement("button");
 
@@ -231,6 +300,7 @@ function createTaskElement(task) {
                 item => item.id !== task.id
             );
 
+
             saveTasks();
 
             renderTasks();
@@ -240,9 +310,11 @@ function createTaskElement(task) {
     });
 
 
+    // Add elements
+
     li.appendChild(checkbox);
 
-    li.appendChild(span);
+    li.appendChild(content);
 
     li.appendChild(editButton);
 
@@ -260,7 +332,9 @@ function createTaskElement(task) {
 
 function renderTasks() {
 
-    const taskList = document.getElementById("taskList");
+    const taskList =
+        document.getElementById("taskList");
+
 
     taskList.innerHTML = "";
 
@@ -268,18 +342,9 @@ function renderTasks() {
     let filteredTasks = tasks;
 
 
-    // All tasks
-
-    if (currentFilter === "all") {
-
-        filteredTasks = tasks;
-
-    }
-
-
     // Active tasks
 
-    else if (currentFilter === "active") {
+    if (currentFilter === "active") {
 
         filteredTasks = tasks.filter(
             task => !task.completed
@@ -290,7 +355,7 @@ function renderTasks() {
 
     // Completed tasks
 
-    else if (currentFilter === "completed") {
+    if (currentFilter === "completed") {
 
         filteredTasks = tasks.filter(
             task => task.completed
@@ -303,7 +368,8 @@ function renderTasks() {
 
     filteredTasks.forEach(function (task) {
 
-        const taskElement = createTaskElement(task);
+        const taskElement =
+            createTaskElement(task);
 
         taskList.appendChild(taskElement);
 
@@ -319,9 +385,8 @@ function renderTasks() {
 // FILTER BUTTONS
 // =====================================
 
-const filterButtons = document.querySelectorAll(
-    ".filter-btn"
-);
+const filterButtons =
+    document.querySelectorAll(".filter-btn");
 
 
 filterButtons.forEach(function (button) {
@@ -331,16 +396,12 @@ filterButtons.forEach(function (button) {
         currentFilter = button.dataset.filter;
 
 
-        // Remove active class
-
         filterButtons.forEach(function (btn) {
 
             btn.classList.remove("active-filter");
 
         });
 
-
-        // Add active class
 
         button.classList.add("active-filter");
 
@@ -356,19 +417,16 @@ filterButtons.forEach(function (button) {
 // ADD BUTTON
 // =====================================
 
-document.getElementById("addBtn").addEventListener(
-    "click",
-    addTask
-);
+document.getElementById("addBtn")
+    .addEventListener("click", addTask);
 
 
 // =====================================
 // ENTER KEY
 // =====================================
 
-document.getElementById("taskInput").addEventListener(
-    "keydown",
-    function (event) {
+document.getElementById("taskInput")
+    .addEventListener("keydown", function (event) {
 
         if (event.key === "Enter") {
 
@@ -376,8 +434,7 @@ document.getElementById("taskInput").addEventListener(
 
         }
 
-    }
-);
+    });
 
 
 // =====================================

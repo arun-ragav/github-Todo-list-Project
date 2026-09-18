@@ -2,15 +2,12 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>G.K.G. Arun Ragav | To-Do List</title>
 
     <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
@@ -18,7 +15,6 @@
     <div class="container">
 
         <!-- HEADER -->
-
         <header class="header">
 
             <h1>📝 My To-Do List</h1>
@@ -31,7 +27,6 @@
 
 
         <!-- PROFILE -->
-
         <section class="profile">
 
             <img
@@ -50,7 +45,6 @@
 
 
         <!-- ADD TASK -->
-
         <div class="input-section">
 
             <input
@@ -60,13 +54,22 @@
                 autocomplete="off"
             >
 
+            <input
+                type="date"
+                id="taskDate"
+            >
+
+            <input
+                type="time"
+                id="taskTime"
+            >
+
             <button id="addBtn">Add</button>
 
         </div>
 
 
         <!-- FILTERS -->
-
         <div class="filters">
 
             <button
@@ -91,7 +94,6 @@
 
 
         <!-- STATISTICS -->
-
         <div class="stats">
 
             <div class="stat-box">
@@ -124,7 +126,6 @@
 
 
         <!-- TASK LIST -->
-
         <ul id="taskList"></ul>
 
     </div>
