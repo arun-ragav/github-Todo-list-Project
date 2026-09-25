@@ -6,7 +6,6 @@ const themeBtn = document.getElementById("themeBtn");
 
 
 // Check saved theme
-
 if (localStorage.getItem("theme") === "dark") {
 
     document.body.classList.add("dark-mode");
@@ -17,7 +16,6 @@ if (localStorage.getItem("theme") === "dark") {
 
 
 // Theme button
-
 themeBtn.addEventListener("click", function () {
 
     document.body.classList.toggle("dark-mode");
@@ -46,9 +44,10 @@ themeBtn.addEventListener("click", function () {
 
 let currentFilter = "all";
 
+let searchText = "";
+
 
 // Get saved tasks
-
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
 
@@ -58,7 +57,10 @@ let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
 function saveTasks() {
 
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+    localStorage.setItem(
+        "tasks",
+        JSON.stringify(tasks)
+    );
 
 }
 
@@ -78,11 +80,14 @@ function updateCounters() {
     const active = total - completed;
 
 
-    document.getElementById("totalCount").textContent = total;
+    document.getElementById("totalCount").textContent =
+        total;
 
-    document.getElementById("activeCount").textContent = active;
+    document.getElementById("activeCount").textContent =
+        active;
 
-    document.getElementById("completedCount").textContent = completed;
+    document.getElementById("completedCount").textContent =
+        completed;
 
 }
 
@@ -93,16 +98,20 @@ function updateCounters() {
 
 function addTask() {
 
-    const taskInput = document.getElementById("taskInput");
+    const taskInput =
+        document.getElementById("taskInput");
 
-    const taskDate = document.getElementById("taskDate");
+    const taskDate =
+        document.getElementById("taskDate");
 
-    const taskTime = document.getElementById("taskTime");
+    const taskTime =
+        document.getElementById("taskTime");
 
 
     const text = taskInput.value.trim();
 
 
+    // Check empty task
     if (text === "") {
 
         alert("Please enter a task!");
@@ -112,6 +121,7 @@ function addTask() {
     }
 
 
+    // Create new task
     const newTask = {
 
         id: Date.now(),
@@ -127,12 +137,15 @@ function addTask() {
     };
 
 
+    // Add task
     tasks.push(newTask);
 
 
+    // Save task
     saveTasks();
 
 
+    // Clear inputs
     taskInput.value = "";
 
     taskDate.value = "";
@@ -140,6 +153,7 @@ function addTask() {
     taskTime.value = "";
 
 
+    // Display tasks
     renderTasks();
 
 }
@@ -156,6 +170,7 @@ function createTaskElement(task) {
     li.className = "task";
 
 
+    // Add completed class
     if (task.completed) {
 
         li.classList.add("completed");
@@ -163,9 +178,12 @@ function createTaskElement(task) {
     }
 
 
-    // Checkbox
+    // =================================
+    // CHECKBOX
+    // =================================
 
-    const checkbox = document.createElement("input");
+    const checkbox =
+        document.createElement("input");
 
     checkbox.type = "checkbox";
 
@@ -174,36 +192,48 @@ function createTaskElement(task) {
     checkbox.checked = task.completed;
 
 
-    checkbox.addEventListener("change", function () {
+    checkbox.addEventListener(
+        "change",
+        function () {
 
-        task.completed = checkbox.checked;
+            task.completed = checkbox.checked;
 
-        saveTasks();
+            saveTasks();
 
-        renderTasks();
+            renderTasks();
 
-    });
+        }
+    );
 
 
-    // Task content
+    // =================================
+    // TASK CONTENT
+    // =================================
 
-    const content = document.createElement("div");
+    const content =
+        document.createElement("div");
 
     content.className = "task-content";
 
 
-    // Task text
+    // =================================
+    // TASK TEXT
+    // =================================
 
-    const span = document.createElement("span");
+    const span =
+        document.createElement("span");
 
     span.className = "task-text";
 
     span.textContent = task.text;
 
 
-    // Date and time
+    // =================================
+    // DATE AND TIME
+    // =================================
 
-    const dateInfo = document.createElement("small");
+    const dateInfo =
+        document.createElement("small");
 
     dateInfo.className = "task-date";
 
@@ -231,86 +261,101 @@ function createTaskElement(task) {
 
     } else {
 
-        dateInfo.textContent = "No due date";
+        dateInfo.textContent =
+            "No due date";
 
     }
 
 
+    // Add content
     content.appendChild(span);
 
     content.appendChild(dateInfo);
 
 
-    // =====================================
+    // =================================
     // EDIT BUTTON
-    // =====================================
+    // =================================
 
-    const editButton = document.createElement("button");
+    const editButton =
+        document.createElement("button");
 
     editButton.textContent = "Edit";
 
     editButton.className = "edit-btn";
 
 
-    editButton.addEventListener("click", function () {
+    editButton.addEventListener(
+        "click",
+        function () {
 
-        const newText = prompt(
-            "Edit your task:",
-            task.text
-        );
-
-
-        if (
-            newText !== null &&
-            newText.trim() !== ""
-        ) {
-
-            task.text = newText.trim();
-
-            saveTasks();
-
-            renderTasks();
-
-        }
-
-    });
-
-
-    // =====================================
-    // DELETE BUTTON
-    // =====================================
-
-    const deleteButton = document.createElement("button");
-
-    deleteButton.textContent = "Delete";
-
-    deleteButton.className = "delete-btn";
-
-
-    deleteButton.addEventListener("click", function () {
-
-        const confirmDelete = confirm(
-            "Are you sure you want to delete this task?"
-        );
-
-
-        if (confirmDelete) {
-
-            tasks = tasks.filter(
-                item => item.id !== task.id
+            const newText = prompt(
+                "Edit your task:",
+                task.text
             );
 
 
-            saveTasks();
+            if (
+                newText !== null &&
+                newText.trim() !== ""
+            ) {
 
-            renderTasks();
+                task.text =
+                    newText.trim();
+
+                saveTasks();
+
+                renderTasks();
+
+            }
 
         }
+    );
 
-    });
+
+    // =================================
+    // DELETE BUTTON
+    // =================================
+
+    const deleteButton =
+        document.createElement("button");
+
+    deleteButton.textContent = "Delete";
+
+    deleteButton.className =
+        "delete-btn";
 
 
-    // Add elements
+    deleteButton.addEventListener(
+        "click",
+        function () {
+
+            const confirmDelete =
+                confirm(
+                    "Are you sure you want to delete this task?"
+                );
+
+
+            if (confirmDelete) {
+
+                tasks = tasks.filter(
+                    item => item.id !== task.id
+                );
+
+
+                saveTasks();
+
+                renderTasks();
+
+            }
+
+        }
+    );
+
+
+    // =================================
+    // ADD EVERYTHING TO TASK
+    // =================================
 
     li.appendChild(checkbox);
 
@@ -336,46 +381,82 @@ function renderTasks() {
         document.getElementById("taskList");
 
 
+    // Clear current list
     taskList.innerHTML = "";
 
 
-    let filteredTasks = tasks;
+    // =================================
+    // SEARCH FILTER
+    // =================================
+
+    let filteredTasks = tasks.filter(
+        function (task) {
+
+            return task.text
+                .toLowerCase()
+                .includes(
+                    searchText.toLowerCase()
+                );
+
+        }
+    );
 
 
-    // Active tasks
+    // =================================
+    // ACTIVE FILTER
+    // =================================
 
     if (currentFilter === "active") {
 
-        filteredTasks = tasks.filter(
-            task => !task.completed
-        );
+        filteredTasks =
+            filteredTasks.filter(
+                function (task) {
+
+                    return !task.completed;
+
+                }
+            );
 
     }
 
 
-    // Completed tasks
+    // =================================
+    // COMPLETED FILTER
+    // =================================
 
     if (currentFilter === "completed") {
 
-        filteredTasks = tasks.filter(
-            task => task.completed
-        );
+        filteredTasks =
+            filteredTasks.filter(
+                function (task) {
+
+                    return task.completed;
+
+                }
+            );
 
     }
 
 
-    // Display tasks
+    // =================================
+    // DISPLAY TASKS
+    // =================================
 
-    filteredTasks.forEach(function (task) {
+    filteredTasks.forEach(
+        function (task) {
 
-        const taskElement =
-            createTaskElement(task);
+            const taskElement =
+                createTaskElement(task);
 
-        taskList.appendChild(taskElement);
+            taskList.appendChild(
+                taskElement
+            );
 
-    });
+        }
+    );
 
 
+    // Update counters
     updateCounters();
 
 }
@@ -386,31 +467,73 @@ function renderTasks() {
 // =====================================
 
 const filterButtons =
-    document.querySelectorAll(".filter-btn");
+    document.querySelectorAll(
+        ".filter-btn"
+    );
 
 
-filterButtons.forEach(function (button) {
+filterButtons.forEach(
+    function (button) {
 
-    button.addEventListener("click", function () {
+        button.addEventListener(
+            "click",
+            function () {
 
-        currentFilter = button.dataset.filter;
-
-
-        filterButtons.forEach(function (btn) {
-
-            btn.classList.remove("active-filter");
-
-        });
+                // Get selected filter
+                currentFilter =
+                    button.dataset.filter;
 
 
-        button.classList.add("active-filter");
+                // Remove active class
+                filterButtons.forEach(
+                    function (btn) {
+
+                        btn.classList.remove(
+                            "active-filter"
+                        );
+
+                    }
+                );
+
+
+                // Add active class
+                button.classList.add(
+                    "active-filter"
+                );
+
+
+                // Display tasks
+                renderTasks();
+
+            }
+        );
+
+    }
+);
+
+
+// =====================================
+// SEARCH TASKS
+// =====================================
+
+const searchInput =
+    document.getElementById(
+        "searchInput"
+    );
+
+
+searchInput.addEventListener(
+    "input",
+    function () {
+
+        searchText =
+            searchInput.value.trim();
 
 
         renderTasks();
 
-    });
-
-});
+    }
+);
 
 
 // =====================================
@@ -418,7 +541,10 @@ filterButtons.forEach(function (button) {
 // =====================================
 
 document.getElementById("addBtn")
-    .addEventListener("click", addTask);
+    .addEventListener(
+        "click",
+        addTask
+    );
 
 
 // =====================================
@@ -426,15 +552,18 @@ document.getElementById("addBtn")
 // =====================================
 
 document.getElementById("taskInput")
-    .addEventListener("keydown", function (event) {
+    .addEventListener(
+        "keydown",
+        function (event) {
 
-        if (event.key === "Enter") {
+            if (event.key === "Enter") {
 
-            addTask();
+                addTask();
+
+            }
 
         }
-
-    });
+    );
 
 
 // =====================================

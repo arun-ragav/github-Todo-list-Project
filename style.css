@@ -1275,3 +1275,36 @@ body.dark-mode #themeBtn {
     }
 
 }
+/* =====================================
+   SEARCH
+===================================== */
+
+.search-section {
+    margin-bottom: 18px;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+}
+
+#searchInput:focus {
+    border: 2px solid #333;
+}
+
+
+/* DARK MODE SEARCH */
+
+body.dark-mode #searchInput {
+    background: #333;
+    color: white;
+    border-color: #777;
+}
+
+body.dark-mode #searchInput::placeholder {
+    color: #ccc;
+}
