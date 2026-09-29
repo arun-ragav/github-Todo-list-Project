@@ -8,21 +8,16 @@
     padding: 0;
 }
 
+
 body {
 
     font-family: Arial, sans-serif;
 
-    background: #f2f2f2;
+    background: #f4f7fb;
 
     color: #222;
 
     min-height: 100vh;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
 
     padding: 30px;
 
@@ -37,19 +32,18 @@ body {
 
 .container {
 
-    width: 100%;
+    max-width: 900px;
 
-    max-width: 750px;
+    margin: auto;
 
     background: white;
 
-    padding: 35px;
+    padding: 30px;
 
-    border-radius: 20px;
+    border-radius: 18px;
 
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-
-    transition: 0.3s;
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.1);
 
 }
 
@@ -58,652 +52,70 @@ body {
    HEADER
 ===================================== */
 
-.header {
+header {
 
-    text-align: center;
+    display: flex;
 
-    margin-bottom: 25px;
+    justify-content: space-between;
 
-}
+    align-items: center;
 
-.header h1 {
+    margin-bottom: 30px;
 
-    font-size: 32px;
-
-    margin-bottom: 8px;
+    gap: 20px;
 
 }
 
-.header p {
-
-    color: #666;
-
-    font-size: 16px;
-
-}
-
-
-/* =====================================
-   THEME BUTTON
-===================================== */
-
-#themeBtn {
-
-    margin-top: 15px;
-
-    padding: 10px 18px;
-
-    border: none;
-
-    border-radius: 8px;
-
-    background: #333;
-
-    color: white;
-
-    cursor: pointer;
-
-    font-size: 14px;
-
-    transition: 0.3s;
-
-}
-
-#themeBtn:hover {
-
-    transform: scale(1.05);
-
-}
-
-
-/* =====================================
-   PROFILE
-===================================== */
 
 .profile {
 
-    text-align: center;
+    display: flex;
 
-    background: #f7f7f7;
+    align-items: center;
 
-    padding: 20px;
-
-    border-radius: 15px;
-
-    margin-bottom: 25px;
-
-    transition: 0.3s;
+    gap: 15px;
 
 }
 
-.profile-image {
 
-    width: 110px;
+.profile img {
 
-    height: 110px;
+    width: 80px;
+
+    height: 80px;
 
     object-fit: cover;
 
     border-radius: 50%;
 
-    display: block;
-
-    margin: 0 auto 15px;
-
-    border: 4px solid #333;
-
-}
-
-.profile h2 {
-
-    margin-bottom: 7px;
-
-    font-size: 24px;
-
-}
-
-.profile p {
-
-    color: #666;
-
-    margin-top: 5px;
+    border: 3px solid #333;
 
 }
 
 
-/* =====================================
-   INPUT SECTION
-===================================== */
+.profile h1 {
 
-.input-section {
-
-    display: flex;
-
-    gap: 12px;
-
-    margin-bottom: 18px;
-
-}
-
-#taskInput {
-
-    flex: 1;
-
-    padding: 15px;
-
-    border: 1px solid #ccc;
-
-    border-radius: 10px;
-
-    font-size: 16px;
-
-    outline: none;
-
-}
-
-#taskInput:focus {
-
-    border: 2px solid #333;
-
-}
-
-#addBtn {
-
-    padding: 0 25px;
-
-    border: none;
-
-    border-radius: 10px;
-
-    background: #333;
-
-    color: white;
-
-    font-size: 16px;
-
-    cursor: pointer;
-
-    transition: 0.3s;
-
-}
-
-#addBtn:hover {
-
-    transform: scale(1.05);
-
-}
-
-
-/* =====================================
-   FILTER BUTTONS
-===================================== */
-
-.filters {
-
-    display: flex;
-
-    justify-content: center;
-
-    gap: 10px;
-
-    margin-bottom: 18px;
-
-}
-
-.filter-btn {
-
-    padding: 10px 20px;
-
-    border: 1px solid #ccc;
-
-    border-radius: 8px;
-
-    background: white;
-
-    color: #333;
-
-    cursor: pointer;
-
-    font-size: 14px;
-
-}
-
-.filter-btn:hover {
-
-    background: #333;
-
-    color: white;
-
-}
-
-.active-filter {
-
-    background: #333;
-
-    color: white;
-
-}
-
-
-/* =====================================
-   STATISTICS
-===================================== */
-
-.stats {
-
-    display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
-
-    gap: 12px;
-
-    margin-bottom: 20px;
-
-}
-
-.stat-box {
-
-    text-align: center;
-
-    background: #f5f5f5;
-
-    padding: 15px;
-
-    border-radius: 12px;
-
-    transition: 0.3s;
-
-}
-
-.stat-box span {
-
-    display: block;
-
-    font-size: 24px;
-
-    font-weight: bold;
+    font-size: 28px;
 
     margin-bottom: 5px;
 
 }
 
-.stat-box p {
+
+.profile p {
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+}
+
+
+.profile span {
+
+    font-size: 14px;
 
     color: #666;
-
-}
-
-
-/* =====================================
-   TASK LIST
-===================================== */
-
-#taskList {
-
-    list-style: none;
-
-}
-
-
-/* =====================================
-   TASK
-===================================== */
-
-.task {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-
-    background: #f7f7f7;
-
-    padding: 14px;
-
-    margin-bottom: 10px;
-
-    border-radius: 10px;
-
-    border-left: 4px solid #333;
-
-    transition: 0.3s;
-
-}
-
-.task:hover {
-
-    transform: translateX(3px);
-
-}
-
-
-/* CHECKBOX */
-
-.task-checkbox {
-
-    width: 20px;
-
-    height: 20px;
-
-    cursor: pointer;
-
-}
-
-
-/* TASK TEXT */
-
-.task-text {
-
-    flex: 1;
-
-    font-size: 16px;
-
-    word-break: break-word;
-
-}
-
-
-/* COMPLETED TASK */
-
-.completed .task-text {
-
-    text-decoration: line-through;
-
-    color: #888;
-
-}
-
-
-/* =====================================
-   TASK BUTTONS
-===================================== */
-
-.task button {
-
-    border: none;
-
-    padding: 9px 12px;
-
-    border-radius: 7px;
-
-    cursor: pointer;
-
-    color: white;
-
-    font-size: 13px;
-
-}
-
-.edit-btn {
-
-    background: #555;
-
-}
-
-.delete-btn {
-
-    background: #e74c3c;
-
-}
-
-.task button:hover {
-
-    opacity: 0.8;
-
-}
-
-
-/* =====================================
-   DARK MODE
-===================================== */
-
-body.dark-mode {
-
-    background-color: #121212;
-
-    color: white;
-
-}
-
-body.dark-mode .container {
-
-    background-color: #1e1e1e;
-
-}
-
-body.dark-mode .header h1 {
-
-    color: white;
-
-}
-
-body.dark-mode .header p {
-
-    color: #ccc;
-
-}
-
-body.dark-mode .profile {
-
-    background-color: #2a2a2a;
-
-    color: white;
-
-}
-
-body.dark-mode .profile h2 {
-
-    color: white;
-
-}
-
-body.dark-mode .profile p {
-
-    color: #ccc;
-
-}
-
-body.dark-mode #taskInput {
-
-    background-color: #333;
-
-    color: white;
-
-    border: 1px solid #777;
-
-}
-
-body.dark-mode #taskInput::placeholder {
-
-    color: #ccc;
-
-}
-
-body.dark-mode .filter-btn {
-
-    background-color: #333;
-
-    color: white;
-
-    border-color: #666;
-
-}
-
-body.dark-mode .active-filter {
-
-    background-color: white;
-
-    color: #222;
-
-}
-
-body.dark-mode .stat-box {
-
-    background-color: #333;
-
-    color: white;
-
-}
-
-body.dark-mode .stat-box p {
-
-    color: #ccc;
-
-}
-
-body.dark-mode .task {
-
-    background-color: #333;
-
-    color: white;
-
-}
-
-body.dark-mode .task-text {
-
-    color: white;
-
-}
-
-body.dark-mode #themeBtn {
-
-    background-color: white;
-
-    color: #222;
-
-}
-
-
-/* =====================================
-   MOBILE RESPONSIVE
-===================================== */
-
-@media (max-width: 600px) {
-
-    body {
-
-        padding: 15px;
-
-    }
-
-    .container {
-
-        padding: 20px;
-
-    }
-
-    .header h1 {
-
-        font-size: 26px;
-
-    }
-
-    .input-section {
-
-        flex-direction: column;
-
-    }
-
-    #addBtn {
-
-        padding: 12px;
-
-    }
-
-    .stats {
-
-        grid-template-columns: 1fr;
-
-    }
-
-    .task {
-
-        flex-wrap: wrap;
-
-    }
-
-}/* =====================================
-   GENERAL
-===================================== */
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-
-    font-family: Arial, sans-serif;
-
-    background: #f2f2f2;
-
-    color: #222;
-
-    min-height: 100vh;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    padding: 30px;
-
-    transition: 0.3s;
-
-}
-
-
-/* =====================================
-   MAIN CONTAINER
-===================================== */
-
-.container {
-
-    width: 100%;
-
-    max-width: 850px;
-
-    background: white;
-
-    padding: 35px;
-
-    border-radius: 20px;
-
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-
-    transition: 0.3s;
-
-}
-
-
-/* =====================================
-   HEADER
-===================================== */
-
-.header {
-
-    text-align: center;
-
-    margin-bottom: 25px;
-
-}
-
-.header h1 {
-
-    font-size: 32px;
-
-    margin-bottom: 8px;
-
-}
-
-.header p {
-
-    color: #666;
-
-    font-size: 16px;
 
 }
 
@@ -712,17 +124,15 @@ body {
    THEME BUTTON
 ===================================== */
 
-#themeBtn {
+.theme-btn {
 
-    margin-top: 15px;
-
-    padding: 10px 18px;
+    padding: 12px 16px;
 
     border: none;
 
-    border-radius: 8px;
+    border-radius: 10px;
 
-    background: #333;
+    background: #222;
 
     color: white;
 
@@ -730,81 +140,30 @@ body {
 
     font-size: 14px;
 
-    transition: 0.3s;
-
-}
-
-#themeBtn:hover {
-
-    transform: scale(1.05);
-
 }
 
 
-/* =====================================
-   PROFILE
-===================================== */
+.theme-btn:hover {
 
-.profile {
-
-    text-align: center;
-
-    background: #f7f7f7;
-
-    padding: 20px;
-
-    border-radius: 15px;
-
-    margin-bottom: 25px;
-
-    transition: 0.3s;
-
-}
-
-.profile-image {
-
-    width: 110px;
-
-    height: 110px;
-
-    object-fit: cover;
-
-    border-radius: 50%;
-
-    display: block;
-
-    margin: 0 auto 15px;
-
-    border: 4px solid #333;
-
-}
-
-.profile h2 {
-
-    margin-bottom: 7px;
-
-    font-size: 24px;
-
-}
-
-.profile p {
-
-    color: #666;
-
-    margin-top: 5px;
+    opacity: 0.8;
 
 }
 
 
 /* =====================================
-   INPUT SECTION
+   ADD TASK SECTION
 ===================================== */
 
-.input-section {
+.add-task-section {
 
     display: grid;
 
-    grid-template-columns: 1fr 160px 130px 80px;
+    grid-template-columns:
+        1fr
+        auto
+        auto
+        auto
+        auto;
 
     gap: 10px;
 
@@ -812,45 +171,106 @@ body {
 
 }
 
-.input-section input {
+
+#taskInput {
 
     padding: 14px;
 
     border: 1px solid #ccc;
 
-    border-radius: 9px;
+    border-radius: 10px;
+
+    font-size: 15px;
+
+    outline: none;
+
+}
+
+
+#taskDate,
+#taskTime,
+#taskPriority {
+
+    padding: 12px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 10px;
 
     font-size: 14px;
 
-}
-
-#taskInput {
-
-    min-width: 0;
+    background: white;
 
 }
+
+
+#taskInput:focus,
+#taskDate:focus,
+#taskTime:focus,
+#taskPriority:focus {
+
+    border: 2px solid #333;
+
+}
+
 
 #addBtn {
 
+    padding: 12px 20px;
+
     border: none;
 
-    border-radius: 9px;
+    border-radius: 10px;
 
-    background: #333;
+    background: #222;
 
     color: white;
 
     cursor: pointer;
 
-    font-size: 15px;
-
-    transition: 0.3s;
+    font-size: 14px;
 
 }
+
 
 #addBtn:hover {
 
     opacity: 0.8;
+
+}
+
+
+/* =====================================
+   SEARCH
+===================================== */
+
+.search-section {
+
+    margin-bottom: 18px;
+
+}
+
+
+#searchInput {
+
+    width: 100%;
+
+    padding: 14px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 10px;
+
+    font-size: 15px;
+
+    outline: none;
+
+}
+
+
+#searchInput:focus {
+
+    border: 2px solid #333;
 
 }
 
@@ -863,25 +283,22 @@ body {
 
     display: flex;
 
-    justify-content: center;
-
     gap: 10px;
 
-    margin-bottom: 18px;
+    margin-bottom: 20px;
 
 }
 
+
 .filter-btn {
 
-    padding: 10px 20px;
+    padding: 10px 18px;
 
-    border: 1px solid #ccc;
+    border: none;
 
     border-radius: 8px;
 
-    background: white;
-
-    color: #333;
+    background: #e5e5e5;
 
     cursor: pointer;
 
@@ -889,17 +306,17 @@ body {
 
 }
 
+
 .filter-btn:hover {
 
-    background: #333;
-
-    color: white;
+    background: #d5d5d5;
 
 }
 
+
 .active-filter {
 
-    background: #333;
+    background: #222;
 
     color: white;
 
@@ -912,43 +329,42 @@ body {
 
 .stats {
 
-    display: grid;
+    display: flex;
 
-    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
 
-    gap: 12px;
-
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 
 }
+
 
 .stat-box {
 
+    flex: 1;
+
     text-align: center;
 
-    background: #f5f5f5;
+    background: #f1f1f1;
 
     padding: 15px;
 
-    border-radius: 12px;
-
-    transition: 0.3s;
+    border-radius: 10px;
 
 }
 
-.stat-box span {
 
-    display: block;
+.stat-box h3 {
 
     font-size: 24px;
-
-    font-weight: bold;
 
     margin-bottom: 5px;
 
 }
 
+
 .stat-box p {
+
+    font-size: 13px;
 
     color: #666;
 
@@ -966,10 +382,6 @@ body {
 }
 
 
-/* =====================================
-   TASK
-===================================== */
-
 .task {
 
     display: flex;
@@ -978,69 +390,68 @@ body {
 
     gap: 12px;
 
-    background: #f7f7f7;
+    padding: 16px;
 
-    padding: 15px;
+    margin-bottom: 12px;
 
-    margin-bottom: 10px;
+    background: #f8f8f8;
 
-    border-radius: 10px;
+    border-radius: 12px;
 
-    border-left: 4px solid #333;
-
-    transition: 0.3s;
+    border-left: 5px solid #333;
 
 }
 
-.task:hover {
-
-    transform: translateX(3px);
-
-}
-
-
-/* =====================================
-   CHECKBOX
-===================================== */
 
 .task-checkbox {
 
-    width: 20px;
+    width: 18px;
 
-    height: 20px;
+    height: 18px;
 
     cursor: pointer;
 
 }
 
 
-/* =====================================
-   TASK CONTENT
-===================================== */
-
 .task-content {
 
     flex: 1;
 
+    display: flex;
+
+    flex-direction: column;
+
 }
+
 
 .task-text {
 
-    display: block;
-
     font-size: 16px;
 
-    margin-bottom: 5px;
+    font-weight: bold;
 
     word-break: break-word;
 
 }
 
+
 .task-date {
 
-    font-size: 13px;
+    margin-top: 5px;
+
+    font-size: 12px;
 
     color: #777;
+
+}
+
+
+.task-priority {
+
+    margin-top: 5px;
+
+    font-size: 13px;
 
 }
 
@@ -1049,48 +460,70 @@ body {
    COMPLETED TASK
 ===================================== */
 
-.completed .task-text {
+.task.completed {
+
+    opacity: 0.65;
+
+}
+
+
+.task.completed .task-text {
 
     text-decoration: line-through;
-
-    color: #888;
 
 }
 
 
 /* =====================================
-   TASK BUTTONS
+   EDIT BUTTON
 ===================================== */
-
-.task button {
-
-    border: none;
-
-    padding: 9px 12px;
-
-    border-radius: 7px;
-
-    cursor: pointer;
-
-    color: white;
-
-    font-size: 13px;
-
-}
 
 .edit-btn {
 
+    padding: 8px 12px;
+
+    border: none;
+
+    border-radius: 7px;
+
     background: #555;
 
+    color: white;
+
+    cursor: pointer;
+
 }
+
+
+.edit-btn:hover {
+
+    opacity: 0.8;
+
+}
+
+
+/* =====================================
+   DELETE BUTTON
+===================================== */
 
 .delete-btn {
 
-    background: #e74c3c;
+    padding: 8px 12px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: #c62828;
+
+    color: white;
+
+    cursor: pointer;
 
 }
 
-.task button:hover {
+
+.delete-btn:hover {
 
     opacity: 0.8;
 
@@ -1103,93 +536,101 @@ body {
 
 body.dark-mode {
 
-    background-color: #121212;
+    background: #121212;
 
     color: white;
 
 }
+
 
 body.dark-mode .container {
 
-    background-color: #1e1e1e;
+    background: #1e1e1e;
 
 }
 
-body.dark-mode .header h1 {
 
-    color: white;
+body.dark-mode .profile span {
 
-}
-
-body.dark-mode .header p {
-
-    color: #ccc;
+    color: #bbb;
 
 }
 
-body.dark-mode .profile {
 
-    background-color: #2a2a2a;
+body.dark-mode .theme-btn {
 
-    color: white;
+    background: white;
 
-}
-
-body.dark-mode .profile h2 {
-
-    color: white;
+    color: black;
 
 }
 
-body.dark-mode .profile p {
-
-    color: #ccc;
-
-}
 
 body.dark-mode #taskInput,
 body.dark-mode #taskDate,
-body.dark-mode #taskTime {
+body.dark-mode #taskTime,
+body.dark-mode #taskPriority {
 
-    background-color: #333;
+    background: #333;
 
     color: white;
 
-    border: 1px solid #777;
+    border-color: #777;
 
 }
 
-body.dark-mode #taskInput::placeholder {
+
+body.dark-mode #searchInput {
+
+    background: #333;
+
+    color: white;
+
+    border-color: #777;
+
+}
+
+
+body.dark-mode #searchInput::placeholder {
 
     color: #ccc;
 
 }
 
+
+body.dark-mode #addBtn {
+
+    background: white;
+
+    color: black;
+
+}
+
+
 body.dark-mode .filter-btn {
 
-    background-color: #333;
+    background: #444;
 
     color: white;
 
-    border-color: #666;
-
 }
+
 
 body.dark-mode .active-filter {
 
-    background-color: white;
+    background: white;
 
-    color: #222;
+    color: black;
 
 }
+
 
 body.dark-mode .stat-box {
 
-    background-color: #333;
-
-    color: white;
+    background: #333;
 
 }
+
 
 body.dark-mode .stat-box p {
 
@@ -1197,40 +638,45 @@ body.dark-mode .stat-box p {
 
 }
 
+
 body.dark-mode .task {
 
-    background-color: #333;
+    background: #2b2b2b;
 
-    color: white;
-
-}
-
-body.dark-mode .task-text {
-
-    color: white;
+    border-left-color: white;
 
 }
+
 
 body.dark-mode .task-date {
 
-    color: #ccc;
-
-}
-
-body.dark-mode #themeBtn {
-
-    background-color: white;
-
-    color: #222;
+    color: #bbb;
 
 }
 
 
 /* =====================================
-   MOBILE RESPONSIVE
+   RESPONSIVE DESIGN
 ===================================== */
 
-@media (max-width: 700px) {
+@media (max-width: 800px) {
+
+    .add-task-section {
+
+        grid-template-columns: 1fr 1fr;
+
+    }
+
+    #taskInput {
+
+        grid-column: 1 / -1;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
 
     body {
 
@@ -1238,35 +684,61 @@ body.dark-mode #themeBtn {
 
     }
 
+
     .container {
 
         padding: 20px;
 
     }
 
-    .header h1 {
 
-        font-size: 26px;
+    header {
 
-    }
+        flex-direction: column;
 
-    .input-section {
-
-        grid-template-columns: 1fr;
+        align-items: flex-start;
 
     }
 
-    #addBtn {
 
-        padding: 12px;
+    .profile img {
+
+        width: 65px;
+
+        height: 65px;
 
     }
+
+
+    .profile h1 {
+
+        font-size: 22px;
+
+    }
+
+
+    .add-task-section {
+
+        display: flex;
+
+        flex-direction: column;
+
+    }
+
+
+    .filters {
+
+        flex-wrap: wrap;
+
+    }
+
 
     .stats {
 
-        grid-template-columns: 1fr;
+        flex-direction: column;
 
     }
+
 
     .task {
 
@@ -1274,37 +746,11 @@ body.dark-mode #themeBtn {
 
     }
 
-}
-/* =====================================
-   SEARCH
-===================================== */
 
-.search-section {
-    margin-bottom: 18px;
-}
+    .task-content {
 
-#searchInput {
-    width: 100%;
-    padding: 14px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    font-size: 15px;
-    outline: none;
-}
+        min-width: 150px;
 
-#searchInput:focus {
-    border: 2px solid #333;
-}
+    }
 
-
-/* DARK MODE SEARCH */
-
-body.dark-mode #searchInput {
-    background: #333;
-    color: white;
-    border-color: #777;
-}
-
-body.dark-mode #searchInput::placeholder {
-    color: #ccc;
 }

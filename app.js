@@ -2,40 +2,64 @@
 // DARK / LIGHT MODE
 // =====================================
 
-const themeBtn = document.getElementById("themeBtn");
+const themeBtn =
+    document.getElementById("themeBtn");
 
 
 // Check saved theme
+
 if (localStorage.getItem("theme") === "dark") {
 
     document.body.classList.add("dark-mode");
 
-    themeBtn.textContent = "☀️ Light Mode";
+    themeBtn.textContent =
+        "☀️ Light Mode";
 
 }
 
 
 // Theme button
-themeBtn.addEventListener("click", function () {
 
-    document.body.classList.toggle("dark-mode");
+themeBtn.addEventListener(
+    "click",
+    function () {
+
+        document.body.classList.toggle(
+            "dark-mode"
+        );
 
 
-    if (document.body.classList.contains("dark-mode")) {
+        if (
+            document.body.classList.contains(
+                "dark-mode"
+            )
+        ) {
 
-        localStorage.setItem("theme", "dark");
+            localStorage.setItem(
+                "theme",
+                "dark"
+            );
 
-        themeBtn.textContent = "☀️ Light Mode";
+            themeBtn.textContent =
+                "☀️ Light Mode";
 
-    } else {
+        }
 
-        localStorage.setItem("theme", "light");
+        else {
 
-        themeBtn.textContent = "🌙 Dark Mode";
+            localStorage.setItem(
+                "theme",
+                "light"
+            );
+
+            themeBtn.textContent =
+                "🌙 Dark Mode";
+
+        }
 
     }
+);
 
-});
 
 
 // =====================================
@@ -48,7 +72,12 @@ let searchText = "";
 
 
 // Get saved tasks
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+let tasks =
+    JSON.parse(
+        localStorage.getItem("tasks")
+    ) || [];
+
 
 
 // =====================================
@@ -65,31 +94,43 @@ function saveTasks() {
 }
 
 
+
 // =====================================
 // UPDATE COUNTERS
 // =====================================
 
 function updateCounters() {
 
-    const total = tasks.length;
-
-    const completed = tasks.filter(
-        task => task.completed
-    ).length;
-
-    const active = total - completed;
+    const total =
+        tasks.length;
 
 
-    document.getElementById("totalCount").textContent =
-        total;
+    const completed =
+        tasks.filter(
+            task => task.completed
+        ).length;
 
-    document.getElementById("activeCount").textContent =
-        active;
 
-    document.getElementById("completedCount").textContent =
-        completed;
+    const active =
+        total - completed;
+
+
+    document.getElementById(
+        "totalCount"
+    ).textContent = total;
+
+
+    document.getElementById(
+        "activeCount"
+    ).textContent = active;
+
+
+    document.getElementById(
+        "completedCount"
+    ).textContent = completed;
 
 }
+
 
 
 // =====================================
@@ -99,22 +140,40 @@ function updateCounters() {
 function addTask() {
 
     const taskInput =
-        document.getElementById("taskInput");
+        document.getElementById(
+            "taskInput"
+        );
+
 
     const taskDate =
-        document.getElementById("taskDate");
+        document.getElementById(
+            "taskDate"
+        );
+
 
     const taskTime =
-        document.getElementById("taskTime");
+        document.getElementById(
+            "taskTime"
+        );
 
 
-    const text = taskInput.value.trim();
+    const taskPriority =
+        document.getElementById(
+            "taskPriority"
+        );
+
+
+    const text =
+        taskInput.value.trim();
 
 
     // Check empty task
+
     if (text === "") {
 
-        alert("Please enter a task!");
+        alert(
+            "Please enter a task!"
+        );
 
         return;
 
@@ -122,6 +181,7 @@ function addTask() {
 
 
     // Create new task
+
     const newTask = {
 
         id: Date.now(),
@@ -132,31 +192,42 @@ function addTask() {
 
         time: taskTime.value,
 
+        priority:
+            taskPriority.value,
+
         completed: false
 
     };
 
 
     // Add task
+
     tasks.push(newTask);
 
 
     // Save task
+
     saveTasks();
 
 
     // Clear inputs
+
     taskInput.value = "";
 
     taskDate.value = "";
 
     taskTime.value = "";
 
+    taskPriority.value =
+        "medium";
+
 
     // Display tasks
+
     renderTasks();
 
 }
+
 
 
 // =====================================
@@ -165,17 +236,23 @@ function addTask() {
 
 function createTaskElement(task) {
 
-    const li = document.createElement("li");
+    const li =
+        document.createElement("li");
+
 
     li.className = "task";
 
 
     // Add completed class
+
     if (task.completed) {
 
-        li.classList.add("completed");
+        li.classList.add(
+            "completed"
+        );
 
     }
+
 
 
     // =================================
@@ -183,20 +260,29 @@ function createTaskElement(task) {
     // =================================
 
     const checkbox =
-        document.createElement("input");
+        document.createElement(
+            "input"
+        );
+
 
     checkbox.type = "checkbox";
 
-    checkbox.className = "task-checkbox";
 
-    checkbox.checked = task.completed;
+    checkbox.className =
+        "task-checkbox";
+
+
+    checkbox.checked =
+        task.completed;
 
 
     checkbox.addEventListener(
         "change",
         function () {
 
-            task.completed = checkbox.checked;
+            task.completed =
+                checkbox.checked;
+
 
             saveTasks();
 
@@ -206,14 +292,20 @@ function createTaskElement(task) {
     );
 
 
+
     // =================================
     // TASK CONTENT
     // =================================
 
     const content =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
-    content.className = "task-content";
+
+    content.className =
+        "task-content";
+
 
 
     // =================================
@@ -221,11 +313,18 @@ function createTaskElement(task) {
     // =================================
 
     const span =
-        document.createElement("span");
+        document.createElement(
+            "span"
+        );
 
-    span.className = "task-text";
 
-    span.textContent = task.text;
+    span.className =
+        "task-text";
+
+
+    span.textContent =
+        task.text;
+
 
 
     // =================================
@@ -233,33 +332,45 @@ function createTaskElement(task) {
     // =================================
 
     const dateInfo =
-        document.createElement("small");
+        document.createElement(
+            "small"
+        );
 
-    dateInfo.className = "task-date";
+
+    dateInfo.className =
+        "task-date";
 
 
-    if (task.date || task.time) {
+    if (
+        task.date ||
+        task.time
+    ) {
 
         let dateText = "";
 
 
         if (task.date) {
 
-            dateText += "📅 " + task.date;
+            dateText +=
+                "📅 " + task.date;
 
         }
 
 
         if (task.time) {
 
-            dateText += "  ⏰ " + task.time;
+            dateText +=
+                "  ⏰ " + task.time;
 
         }
 
 
-        dateInfo.textContent = dateText;
+        dateInfo.textContent =
+            dateText;
 
-    } else {
+    }
+
+    else {
 
         dateInfo.textContent =
             "No due date";
@@ -267,10 +378,64 @@ function createTaskElement(task) {
     }
 
 
-    // Add content
-    content.appendChild(span);
 
-    content.appendChild(dateInfo);
+    // =================================
+    // PRIORITY
+    // =================================
+
+    const priorityInfo =
+        document.createElement(
+            "small"
+        );
+
+
+    priorityInfo.className =
+        "task-priority";
+
+
+    if (
+        task.priority === "high"
+    ) {
+
+        priorityInfo.textContent =
+            "🔴 High Priority";
+
+    }
+
+    else if (
+        task.priority === "low"
+    ) {
+
+        priorityInfo.textContent =
+            "🟢 Low Priority";
+
+    }
+
+    else {
+
+        priorityInfo.textContent =
+            "🟡 Medium Priority";
+
+    }
+
+
+
+    // Add content
+
+    content.appendChild(
+        span
+    );
+
+
+    content.appendChild(
+        dateInfo
+    );
+
+
+    content.appendChild(
+        priorityInfo
+    );
+
 
 
     // =================================
@@ -278,21 +443,28 @@ function createTaskElement(task) {
     // =================================
 
     const editButton =
-        document.createElement("button");
+        document.createElement(
+            "button"
+        );
 
-    editButton.textContent = "Edit";
 
-    editButton.className = "edit-btn";
+    editButton.textContent =
+        "Edit";
+
+
+    editButton.className =
+        "edit-btn";
 
 
     editButton.addEventListener(
         "click",
         function () {
 
-            const newText = prompt(
-                "Edit your task:",
-                task.text
-            );
+            const newText =
+                prompt(
+                    "Edit your task:",
+                    task.text
+                );
 
 
             if (
@@ -302,6 +474,7 @@ function createTaskElement(task) {
 
                 task.text =
                     newText.trim();
+
 
                 saveTasks();
 
@@ -313,14 +486,20 @@ function createTaskElement(task) {
     );
 
 
+
     // =================================
     // DELETE BUTTON
     // =================================
 
     const deleteButton =
-        document.createElement("button");
+        document.createElement(
+            "button"
+        );
 
-    deleteButton.textContent = "Delete";
+
+    deleteButton.textContent =
+        "Delete";
+
 
     deleteButton.className =
         "delete-btn";
@@ -338,9 +517,12 @@ function createTaskElement(task) {
 
             if (confirmDelete) {
 
-                tasks = tasks.filter(
-                    item => item.id !== task.id
-                );
+                tasks =
+                    tasks.filter(
+                        item =>
+                            item.id !==
+                            task.id
+                    );
 
 
                 saveTasks();
@@ -353,22 +535,35 @@ function createTaskElement(task) {
     );
 
 
+
     // =================================
     // ADD EVERYTHING TO TASK
     // =================================
 
-    li.appendChild(checkbox);
+    li.appendChild(
+        checkbox
+    );
 
-    li.appendChild(content);
 
-    li.appendChild(editButton);
+    li.appendChild(
+        content
+    );
 
-    li.appendChild(deleteButton);
+
+    li.appendChild(
+        editButton
+    );
+
+
+    li.appendChild(
+        deleteButton
+    );
 
 
     return li;
 
 }
+
 
 
 // =====================================
@@ -378,35 +573,45 @@ function createTaskElement(task) {
 function renderTasks() {
 
     const taskList =
-        document.getElementById("taskList");
+        document.getElementById(
+            "taskList"
+        );
 
 
     // Clear current list
+
     taskList.innerHTML = "";
+
 
 
     // =================================
     // SEARCH FILTER
     // =================================
 
-    let filteredTasks = tasks.filter(
-        function (task) {
+    let filteredTasks =
+        tasks.filter(
+            function (task) {
 
-            return task.text
-                .toLowerCase()
-                .includes(
-                    searchText.toLowerCase()
-                );
+                return task.text
+                    .toLowerCase()
+                    .includes(
+                        searchText
+                            .toLowerCase()
+                    );
 
-        }
-    );
+            }
+        );
+
 
 
     // =================================
     // ACTIVE FILTER
     // =================================
 
-    if (currentFilter === "active") {
+    if (
+        currentFilter ===
+        "active"
+    ) {
 
         filteredTasks =
             filteredTasks.filter(
@@ -420,11 +625,15 @@ function renderTasks() {
     }
 
 
+
     // =================================
     // COMPLETED FILTER
     // =================================
 
-    if (currentFilter === "completed") {
+    if (
+        currentFilter ===
+        "completed"
+    ) {
 
         filteredTasks =
             filteredTasks.filter(
@@ -438,6 +647,7 @@ function renderTasks() {
     }
 
 
+
     // =================================
     // DISPLAY TASKS
     // =================================
@@ -446,7 +656,10 @@ function renderTasks() {
         function (task) {
 
             const taskElement =
-                createTaskElement(task);
+                createTaskElement(
+                    task
+                );
+
 
             taskList.appendChild(
                 taskElement
@@ -457,9 +670,11 @@ function renderTasks() {
 
 
     // Update counters
+
     updateCounters();
 
 }
+
 
 
 // =====================================
@@ -480,11 +695,13 @@ filterButtons.forEach(
             function () {
 
                 // Get selected filter
+
                 currentFilter =
                     button.dataset.filter;
 
 
                 // Remove active class
+
                 filterButtons.forEach(
                     function (btn) {
 
@@ -497,12 +714,14 @@ filterButtons.forEach(
 
 
                 // Add active class
+
                 button.classList.add(
                     "active-filter"
                 );
 
 
                 // Display tasks
+
                 renderTasks();
 
             }
@@ -510,6 +729,7 @@ filterButtons.forEach(
 
     }
 );
+
 
 
 // =====================================
@@ -536,34 +756,41 @@ searchInput.addEventListener(
 );
 
 
+
 // =====================================
 // ADD BUTTON
 // =====================================
 
-document.getElementById("addBtn")
-    .addEventListener(
-        "click",
-        addTask
-    );
+document.getElementById(
+    "addBtn"
+).addEventListener(
+    "click",
+    addTask
+);
+
 
 
 // =====================================
 // ENTER KEY
 // =====================================
 
-document.getElementById("taskInput")
-    .addEventListener(
-        "keydown",
-        function (event) {
+document.getElementById(
+    "taskInput"
+).addEventListener(
+    "keydown",
+    function (event) {
 
-            if (event.key === "Enter") {
+        if (
+            event.key === "Enter"
+        ) {
 
-                addTask();
-
-            }
+            addTask();
 
         }
-    );
+
+    }
+);
+
 
 
 // =====================================

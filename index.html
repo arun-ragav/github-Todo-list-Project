@@ -2,72 +2,130 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>G.K.G. Arun Ragav | To-Do List</title>
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="style.css">
+    <title>G.K.G. Arun Ragav - To-Do List</title>
+
+    <link rel="stylesheet"
+        href="style.css">
+
 </head>
+
 
 <body>
 
+
+    <!-- =====================================
+         MAIN CONTAINER
+    ====================================== -->
+
     <div class="container">
 
-        <!-- HEADER -->
-        <header class="header">
 
-            <h1>📝 My To-Do List</h1>
+        <!-- =====================================
+             HEADER
+        ====================================== -->
 
-            <p>Organize your daily tasks</p>
+        <header>
 
-            <button id="themeBtn">🌙 Dark Mode</button>
+            <div class="profile">
+
+                <img
+                    src="G.K.G.Arun Ragav.png"
+                    alt="G.K.G. Arun Ragav">
+
+                <div>
+
+                    <h1>My To-Do List</h1>
+
+                    <p>
+                        G.K.G. Arun Ragav
+                    </p>
+
+                    <span>
+                        B.Tech CSE (Applied AI)
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- DARK MODE BUTTON -->
+
+            <button id="themeBtn"
+                    class="theme-btn">
+
+                🌙 Dark Mode
+
+            </button>
 
         </header>
 
 
-        <!-- PROFILE -->
-        <section class="profile">
 
-            <img
-                src="G.K.G.Arun Ragav.png"
-                alt="G.K.G. Arun Ragav"
-                class="profile-image"
-            >
+        <!-- =====================================
+             ADD TASK SECTION
+        ====================================== -->
 
-            <h2>G.K.G. Arun Ragav</h2>
+        <section class="add-task-section">
 
-            <p>B.Tech CSE (Applied AI)</p>
-
-            <p>St. Joseph University, Palanchur</p>
-
-        </section>
-
-
-        <!-- ADD TASK -->
-        <div class="input-section">
 
             <input
                 type="text"
                 id="taskInput"
                 placeholder="Enter your task..."
-                autocomplete="off"
-            >
+                autocomplete="off">
+
 
             <input
                 type="date"
-                id="taskDate"
-            >
+                id="taskDate">
+
 
             <input
                 type="time"
-                id="taskTime"
-            >
+                id="taskTime">
 
-            <button id="addBtn">Add</button>
 
-        </div>
-        <!-- SEARCH -->
+            <!-- PRIORITY -->
+
+            <select id="taskPriority">
+
+                <option value="high">
+                    🔴 High Priority
+                </option>
+
+                <option value="medium"
+                        selected>
+                    🟡 Medium Priority
+                </option>
+
+                <option value="low">
+                    🟢 Low Priority
+                </option>
+
+            </select>
+
+
+            <button id="addBtn">
+
+                Add Task
+
+            </button>
+
+
+        </section>
+
+
+
+        <!-- =====================================
+             SEARCH
+        ====================================== -->
 
         <div class="search-section">
 
@@ -75,74 +133,112 @@
                 type="text"
                 id="searchInput"
                 placeholder="🔎 Search your tasks..."
-                autocomplete="off"
-            >
+                autocomplete="off">
 
         </div>
 
-        <!-- FILTERS -->
+
+
+        <!-- =====================================
+             FILTER BUTTONS
+        ====================================== -->
+
         <div class="filters">
 
             <button
                 class="filter-btn active-filter"
                 data-filter="all">
+
                 All
+
             </button>
+
 
             <button
                 class="filter-btn"
                 data-filter="active">
+
                 Active
+
             </button>
+
 
             <button
                 class="filter-btn"
                 data-filter="completed">
+
                 Completed
+
             </button>
 
         </div>
 
 
-        <!-- STATISTICS -->
+
+        <!-- =====================================
+             TASK COUNTERS
+        ====================================== -->
+
         <div class="stats">
 
+
             <div class="stat-box">
 
-                <span id="totalCount">0</span>
+                <h3 id="totalCount">
+                    0
+                </h3>
 
-                <p>Total</p>
+                <p>
+                    Total
+                </p>
 
             </div>
 
 
             <div class="stat-box">
 
-                <span id="activeCount">0</span>
+                <h3 id="activeCount">
+                    0
+                </h3>
 
-                <p>Active</p>
+                <p>
+                    Active
+                </p>
 
             </div>
 
 
             <div class="stat-box">
 
-                <span id="completedCount">0</span>
+                <h3 id="completedCount">
+                    0
+                </h3>
 
-                <p>Completed</p>
+                <p>
+                    Completed
+                </p>
 
             </div>
+
 
         </div>
 
 
-        <!-- TASK LIST -->
+
+        <!-- =====================================
+             TASK LIST
+        ====================================== -->
+
         <ul id="taskList"></ul>
+
 
     </div>
 
 
+    <!-- JAVASCRIPT -->
+
     <script src="app.js"></script>
+
 
 </body>
 
