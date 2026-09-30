@@ -6,19 +6,19 @@ const themeBtn =
     document.getElementById("themeBtn");
 
 
-// Check saved theme
+if (
+    localStorage.getItem("theme") === "dark"
+) {
 
-if (localStorage.getItem("theme") === "dark") {
-
-    document.body.classList.add("dark-mode");
+    document.body.classList.add(
+        "dark-mode"
+    );
 
     themeBtn.textContent =
         "☀️ Light Mode";
 
 }
 
-
-// Theme button
 
 themeBtn.addEventListener(
     "click",
@@ -69,6 +69,8 @@ themeBtn.addEventListener(
 let currentFilter = "all";
 
 let searchText = "";
+
+let sortPriority = "default";
 
 
 // Get saved tasks
@@ -167,8 +169,6 @@ function addTask() {
         taskInput.value.trim();
 
 
-    // Check empty task
-
     if (text === "") {
 
         alert(
@@ -179,8 +179,6 @@ function addTask() {
 
     }
 
-
-    // Create new task
 
     const newTask = {
 
@@ -200,17 +198,11 @@ function addTask() {
     };
 
 
-    // Add task
-
     tasks.push(newTask);
 
 
-    // Save task
-
     saveTasks();
 
-
-    // Clear inputs
 
     taskInput.value = "";
 
@@ -221,8 +213,6 @@ function addTask() {
     taskPriority.value =
         "medium";
 
-
-    // Display tasks
 
     renderTasks();
 
@@ -243,12 +233,45 @@ function createTaskElement(task) {
     li.className = "task";
 
 
-    // Add completed class
+    // =================================
+    // COMPLETED
+    // =================================
 
     if (task.completed) {
 
         li.classList.add(
             "completed"
+        );
+
+    }
+
+
+    // =================================
+    // PRIORITY CLASS
+    // =================================
+
+    if (task.priority === "high") {
+
+        li.classList.add(
+            "priority-high"
+        );
+
+    }
+
+    else if (
+        task.priority === "medium"
+    ) {
+
+        li.classList.add(
+            "priority-medium"
+        );
+
+    }
+
+    else {
+
+        li.classList.add(
+            "priority-low"
         );
 
     }
@@ -267,10 +290,8 @@ function createTaskElement(task) {
 
     checkbox.type = "checkbox";
 
-
     checkbox.className =
         "task-checkbox";
-
 
     checkbox.checked =
         task.completed;
@@ -380,7 +401,7 @@ function createTaskElement(task) {
 
 
     // =================================
-    // PRIORITY
+    // PRIORITY TEXT
     // =================================
 
     const priorityInfo =
@@ -420,7 +441,9 @@ function createTaskElement(task) {
 
 
 
-    // Add content
+    // =================================
+    // ADD CONTENT
+    // =================================
 
     content.appendChild(
         span
@@ -537,7 +560,7 @@ function createTaskElement(task) {
 
 
     // =================================
-    // ADD EVERYTHING TO TASK
+    // ADD EVERYTHING
     // =================================
 
     li.appendChild(
@@ -578,14 +601,12 @@ function renderTasks() {
         );
 
 
-    // Clear current list
-
     taskList.innerHTML = "";
 
 
 
     // =================================
-    // SEARCH FILTER
+    // SEARCH
     // =================================
 
     let filteredTasks =
@@ -609,8 +630,7 @@ function renderTasks() {
     // =================================
 
     if (
-        currentFilter ===
-        "active"
+        currentFilter === "active"
     ) {
 
         filteredTasks =
@@ -631,8 +651,7 @@ function renderTasks() {
     // =================================
 
     if (
-        currentFilter ===
-        "completed"
+        currentFilter === "completed"
     ) {
 
         filteredTasks =
@@ -649,7 +668,71 @@ function renderTasks() {
 
 
     // =================================
-    // DISPLAY TASKS
+    // SORT BY PRIORITY
+    // =================================
+
+    if (
+        sortPriority === "high"
+    ) {
+
+        const priorityOrder = {
+
+            high: 1,
+
+            medium: 2,
+
+            low: 3
+
+        };
+
+
+        filteredTasks.sort(
+            function (a, b) {
+
+                return (
+                    priorityOrder[a.priority] -
+                    priorityOrder[b.priority]
+                );
+
+            }
+        );
+
+    }
+
+
+
+    if (
+        sortPriority === "low"
+    ) {
+
+        const priorityOrder = {
+
+            high: 3,
+
+            medium: 2,
+
+            low: 1
+
+        };
+
+
+        filteredTasks.sort(
+            function (a, b) {
+
+                return (
+                    priorityOrder[a.priority] -
+                    priorityOrder[b.priority]
+                );
+
+            }
+        );
+
+    }
+
+
+
+    // =================================
+    // DISPLAY
     // =================================
 
     filteredTasks.forEach(
@@ -668,8 +751,6 @@ function renderTasks() {
         }
     );
 
-
-    // Update counters
 
     updateCounters();
 
@@ -694,13 +775,9 @@ filterButtons.forEach(
             "click",
             function () {
 
-                // Get selected filter
-
                 currentFilter =
                     button.dataset.filter;
 
-
-                // Remove active class
 
                 filterButtons.forEach(
                     function (btn) {
@@ -713,14 +790,10 @@ filterButtons.forEach(
                 );
 
 
-                // Add active class
-
                 button.classList.add(
                     "active-filter"
                 );
 
-
-                // Display tasks
 
                 renderTasks();
 
@@ -733,7 +806,7 @@ filterButtons.forEach(
 
 
 // =====================================
-// SEARCH TASKS
+// SEARCH
 // =====================================
 
 const searchInput =
@@ -748,6 +821,31 @@ searchInput.addEventListener(
 
         searchText =
             searchInput.value.trim();
+
+
+        renderTasks();
+
+    }
+);
+
+
+
+// =====================================
+// PRIORITY SORT
+// =====================================
+
+const sortPrioritySelect =
+    document.getElementById(
+        "sortPriority"
+    );
+
+
+sortPrioritySelect.addEventListener(
+    "change",
+    function () {
+
+        sortPriority =
+            sortPrioritySelect.value;
 
 
         renderTasks();

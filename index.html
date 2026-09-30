@@ -6,22 +6,17 @@
     <meta charset="UTF-8">
 
     <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+          content="width=device-width, initial-scale=1.0">
 
     <title>G.K.G. Arun Ragav - To-Do List</title>
 
     <link rel="stylesheet"
-        href="style.css">
+          href="style.css">
 
 </head>
 
 
 <body>
-
-
-    <!-- =====================================
-         MAIN CONTAINER
-    ====================================== -->
 
     <div class="container">
 
@@ -55,10 +50,9 @@
             </div>
 
 
-            <!-- DARK MODE BUTTON -->
-
-            <button id="themeBtn"
-                    class="theme-btn">
+            <button
+                id="themeBtn"
+                class="theme-btn">
 
                 🌙 Dark Mode
 
@@ -69,11 +63,10 @@
 
 
         <!-- =====================================
-             ADD TASK SECTION
+             ADD TASK
         ====================================== -->
 
         <section class="add-task-section">
-
 
             <input
                 type="text"
@@ -92,17 +85,18 @@
                 id="taskTime">
 
 
-            <!-- PRIORITY -->
-
             <select id="taskPriority">
 
                 <option value="high">
                     🔴 High Priority
                 </option>
 
-                <option value="medium"
-                        selected>
+                <option
+                    value="medium"
+                    selected>
+
                     🟡 Medium Priority
+
                 </option>
 
                 <option value="low">
@@ -118,13 +112,12 @@
 
             </button>
 
-
         </section>
 
 
 
         <!-- =====================================
-             SEARCH
+             SEARCH + SORT
         ====================================== -->
 
         <div class="search-section">
@@ -134,6 +127,29 @@
                 id="searchInput"
                 placeholder="🔎 Search your tasks..."
                 autocomplete="off">
+
+
+            <select id="sortPriority">
+
+                <option value="default">
+
+                    ↕️ Default Order
+
+                </option>
+
+                <option value="high">
+
+                    🔴 High → Low
+
+                </option>
+
+                <option value="low">
+
+                    🟢 Low → High
+
+                </option>
+
+            </select>
 
         </div>
 
@@ -176,7 +192,7 @@
 
 
         <!-- =====================================
-             TASK COUNTERS
+             STATISTICS
         ====================================== -->
 
         <div class="stats">
@@ -220,7 +236,6 @@
 
             </div>
 
-
         </div>
 
 
@@ -235,10 +250,11 @@
     </div>
 
 
-    <!-- JAVASCRIPT -->
+    <!-- =====================================
+         JAVASCRIPT
+    ====================================== -->
 
     <script src="app.js"></script>
-
 
 </body>
 
