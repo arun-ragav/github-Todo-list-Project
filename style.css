@@ -37,7 +37,7 @@ body {
 
 .container {
 
-    max-width: 900px;
+    max-width: 950px;
 
     margin: auto;
 
@@ -171,6 +171,7 @@ header {
         auto
         auto
         auto
+        auto
         auto;
 
     gap: 10px;
@@ -197,7 +198,8 @@ header {
 
 #taskDate,
 #taskTime,
-#taskPriority {
+#taskPriority,
+#taskCategory {
 
     padding: 12px;
 
@@ -209,13 +211,16 @@ header {
 
     background: white;
 
+    cursor: pointer;
+
 }
 
 
 #taskInput:focus,
 #taskDate:focus,
 #taskTime:focus,
-#taskPriority:focus {
+#taskPriority:focus,
+#taskCategory:focus {
 
     border: 2px solid #333;
 
@@ -303,13 +308,6 @@ header {
     cursor: pointer;
 
     outline: none;
-
-}
-
-
-#sortPriority:focus {
-
-    border: 2px solid #333;
 
 }
 
@@ -498,6 +496,17 @@ header {
 }
 
 
+.task-category {
+
+    margin-top: 5px;
+
+    font-size: 13px;
+
+    color: #555;
+
+}
+
+
 
 /* =====================================
    PRIORITY BORDER
@@ -642,6 +651,7 @@ body.dark-mode #taskInput,
 body.dark-mode #taskDate,
 body.dark-mode #taskTime,
 body.dark-mode #taskPriority,
+body.dark-mode #taskCategory,
 body.dark-mode #sortPriority {
 
     background: #333;
@@ -726,17 +736,24 @@ body.dark-mode .task-date {
 }
 
 
+body.dark-mode .task-category {
+
+    color: #ccc;
+
+}
+
+
 
 /* =====================================
-   RESPONSIVE DESIGN
+   RESPONSIVE
 ===================================== */
 
-@media (max-width: 800px) {
+@media (max-width: 1000px) {
 
     .add-task-section {
 
         grid-template-columns:
-            1fr 1fr;
+            1fr 1fr 1fr;
 
     }
 
@@ -751,7 +768,7 @@ body.dark-mode .task-date {
 
 
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
 
     body {
 

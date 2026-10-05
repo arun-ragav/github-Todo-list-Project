@@ -73,8 +73,6 @@ let searchText = "";
 let sortPriority = "default";
 
 
-// Get saved tasks
-
 let tasks =
     JSON.parse(
         localStorage.getItem("tasks")
@@ -165,6 +163,12 @@ function addTask() {
         );
 
 
+    const taskCategory =
+        document.getElementById(
+            "taskCategory"
+        );
+
+
     const text =
         taskInput.value.trim();
 
@@ -180,6 +184,8 @@ function addTask() {
     }
 
 
+    // Create task
+
     const newTask = {
 
         id: Date.now(),
@@ -193,6 +199,9 @@ function addTask() {
         priority:
             taskPriority.value,
 
+        category:
+            taskCategory.value,
+
         completed: false
 
     };
@@ -204,6 +213,8 @@ function addTask() {
     saveTasks();
 
 
+    // Clear inputs
+
     taskInput.value = "";
 
     taskDate.value = "";
@@ -212,6 +223,9 @@ function addTask() {
 
     taskPriority.value =
         "medium";
+
+    taskCategory.value =
+        "study";
 
 
     renderTasks();
@@ -234,7 +248,7 @@ function createTaskElement(task) {
 
 
     // =================================
-    // COMPLETED
+    // COMPLETED CLASS
     // =================================
 
     if (task.completed) {
@@ -288,10 +302,13 @@ function createTaskElement(task) {
         );
 
 
-    checkbox.type = "checkbox";
+    checkbox.type =
+        "checkbox";
+
 
     checkbox.className =
         "task-checkbox";
+
 
     checkbox.checked =
         task.completed;
@@ -401,7 +418,7 @@ function createTaskElement(task) {
 
 
     // =================================
-    // PRIORITY TEXT
+    // PRIORITY
     // =================================
 
     const priorityInfo =
@@ -442,6 +459,65 @@ function createTaskElement(task) {
 
 
     // =================================
+    // CATEGORY
+    // =================================
+
+    const categoryInfo =
+        document.createElement(
+            "small"
+        );
+
+
+    categoryInfo.className =
+        "task-category";
+
+
+    if (
+        task.category === "study"
+    ) {
+
+        categoryInfo.textContent =
+            "📚 Study";
+
+    }
+
+    else if (
+        task.category === "college"
+    ) {
+
+        categoryInfo.textContent =
+            "🎓 College";
+
+    }
+
+    else if (
+        task.category === "project"
+    ) {
+
+        categoryInfo.textContent =
+            "💻 Project";
+
+    }
+
+    else if (
+        task.category === "personal"
+    ) {
+
+        categoryInfo.textContent =
+            "🏠 Personal";
+
+    }
+
+    else {
+
+        categoryInfo.textContent =
+            "📌 Other";
+
+    }
+
+
+
+    // =================================
     // ADD CONTENT
     // =================================
 
@@ -457,6 +533,11 @@ function createTaskElement(task) {
 
     content.appendChild(
         priorityInfo
+    );
+
+
+    content.appendChild(
+        categoryInfo
     );
 
 
@@ -668,7 +749,7 @@ function renderTasks() {
 
 
     // =================================
-    // SORT BY PRIORITY
+    // PRIORITY SORT
     // =================================
 
     if (
@@ -698,7 +779,6 @@ function renderTasks() {
         );
 
     }
-
 
 
     if (
@@ -732,7 +812,7 @@ function renderTasks() {
 
 
     // =================================
-    // DISPLAY
+    // DISPLAY TASKS
     // =================================
 
     filteredTasks.forEach(

@@ -50,6 +50,8 @@
             </div>
 
 
+            <!-- THEME BUTTON -->
+
             <button
                 id="themeBtn"
                 class="theme-btn">
@@ -68,6 +70,9 @@
 
         <section class="add-task-section">
 
+
+            <!-- TASK -->
+
             <input
                 type="text"
                 id="taskInput"
@@ -75,21 +80,30 @@
                 autocomplete="off">
 
 
+            <!-- DATE -->
+
             <input
                 type="date"
                 id="taskDate">
 
+
+            <!-- TIME -->
 
             <input
                 type="time"
                 id="taskTime">
 
 
+            <!-- PRIORITY -->
+
             <select id="taskPriority">
 
                 <option value="high">
+
                     🔴 High Priority
+
                 </option>
+
 
                 <option
                     value="medium"
@@ -99,12 +113,58 @@
 
                 </option>
 
+
                 <option value="low">
+
                     🟢 Low Priority
+
                 </option>
 
             </select>
 
+
+            <!-- CATEGORY -->
+
+            <select id="taskCategory">
+
+                <option value="study">
+
+                    📚 Study
+
+                </option>
+
+
+                <option value="college">
+
+                    🎓 College
+
+                </option>
+
+
+                <option value="project">
+
+                    💻 Project
+
+                </option>
+
+
+                <option value="personal">
+
+                    🏠 Personal
+
+                </option>
+
+
+                <option value="other">
+
+                    📌 Other
+
+                </option>
+
+            </select>
+
+
+            <!-- ADD BUTTON -->
 
             <button id="addBtn">
 
@@ -122,6 +182,9 @@
 
         <div class="search-section">
 
+
+            <!-- SEARCH -->
+
             <input
                 type="text"
                 id="searchInput"
@@ -129,7 +192,10 @@
                 autocomplete="off">
 
 
+            <!-- SORT -->
+
             <select id="sortPriority">
+
 
                 <option value="default">
 
@@ -137,17 +203,20 @@
 
                 </option>
 
+
                 <option value="high">
 
                     🔴 High → Low
 
                 </option>
 
+
                 <option value="low">
 
                     🟢 Low → High
 
                 </option>
+
 
             </select>
 
@@ -160,6 +229,7 @@
         ====================================== -->
 
         <div class="filters">
+
 
             <button
                 class="filter-btn active-filter"
@@ -201,40 +271,55 @@
             <div class="stat-box">
 
                 <h3 id="totalCount">
+
                     0
+
                 </h3>
 
                 <p>
+
                     Total
+
                 </p>
 
             </div>
+
 
 
             <div class="stat-box">
 
                 <h3 id="activeCount">
+
                     0
+
                 </h3>
 
                 <p>
+
                     Active
+
                 </p>
 
             </div>
+
 
 
             <div class="stat-box">
 
                 <h3 id="completedCount">
+
                     0
+
                 </h3>
 
                 <p>
+
                     Completed
+
                 </p>
 
             </div>
+
 
         </div>
 
@@ -250,11 +335,13 @@
     </div>
 
 
+
     <!-- =====================================
          JAVASCRIPT
     ====================================== -->
 
     <script src="app.js"></script>
+
 
 </body>
 
