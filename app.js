@@ -1,88 +1,46 @@
-// =====================================
-// DARK / LIGHT MODE
-// =====================================
+// ===============================
+// THEME
+// ===============================
 
-const themeBtn =
-    document.getElementById("themeBtn");
+const themeBtn = document.getElementById("themeBtn");
 
-
-if (
-    localStorage.getItem("theme") === "dark"
-) {
-
-    document.body.classList.add(
-        "dark-mode"
-    );
-
-    themeBtn.textContent =
-        "☀️ Light Mode";
-
+if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark-mode");
+    themeBtn.textContent = "☀️ Light Mode";
 }
 
+themeBtn.addEventListener("click", function () {
 
-themeBtn.addEventListener(
-    "click",
-    function () {
+    document.body.classList.toggle("dark-mode");
 
-        document.body.classList.toggle(
-            "dark-mode"
-        );
+    if (document.body.classList.contains("dark-mode")) {
 
+        localStorage.setItem("theme", "dark");
+        themeBtn.textContent = "☀️ Light Mode";
 
-        if (
-            document.body.classList.contains(
-                "dark-mode"
-            )
-        ) {
+    } else {
 
-            localStorage.setItem(
-                "theme",
-                "dark"
-            );
-
-            themeBtn.textContent =
-                "☀️ Light Mode";
-
-        }
-
-        else {
-
-            localStorage.setItem(
-                "theme",
-                "light"
-            );
-
-            themeBtn.textContent =
-                "🌙 Dark Mode";
-
-        }
-
+        localStorage.setItem("theme", "light");
+        themeBtn.textContent = "🌙 Dark Mode";
     }
-);
+});
 
 
-
-// =====================================
-// TODO LIST
-// =====================================
+// ===============================
+// VARIABLES
+// ===============================
 
 let currentFilter = "all";
-
+let currentCategory = "all";
 let searchText = "";
+let currentSortPriority = "default";
 
-let sortPriority = "default";
-
-
-let tasks =
-    JSON.parse(
-        localStorage.getItem("tasks")
-    ) || [];
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
 
-
-// =====================================
+// ===============================
 // SAVE TASKS
-// =====================================
+// ===============================
 
 function saveTasks() {
 
@@ -90,101 +48,65 @@ function saveTasks() {
         "tasks",
         JSON.stringify(tasks)
     );
-
 }
 
 
-
-// =====================================
+// ===============================
 // UPDATE COUNTERS
-// =====================================
+// ===============================
 
 function updateCounters() {
 
-    const total =
-        tasks.length;
+    const total = tasks.length;
 
+    const completed = tasks.filter(
+        function (task) {
+            return task.completed;
+        }
+    ).length;
 
-    const completed =
-        tasks.filter(
-            task => task.completed
-        ).length;
+    const active = total - completed;
 
+    document.getElementById("totalCount").textContent = total;
 
-    const active =
-        total - completed;
+    document.getElementById("activeCount").textContent = active;
 
-
-    document.getElementById(
-        "totalCount"
-    ).textContent = total;
-
-
-    document.getElementById(
-        "activeCount"
-    ).textContent = active;
-
-
-    document.getElementById(
-        "completedCount"
-    ).textContent = completed;
-
+    document.getElementById("completedCount").textContent = completed;
 }
 
 
-
-// =====================================
+// ===============================
 // ADD TASK
-// =====================================
+// ===============================
 
 function addTask() {
 
     const taskInput =
-        document.getElementById(
-            "taskInput"
-        );
-
+        document.getElementById("taskInput");
 
     const taskDate =
-        document.getElementById(
-            "taskDate"
-        );
-
+        document.getElementById("taskDate");
 
     const taskTime =
-        document.getElementById(
-            "taskTime"
-        );
-
+        document.getElementById("taskTime");
 
     const taskPriority =
-        document.getElementById(
-            "taskPriority"
-        );
-
+        document.getElementById("taskPriority");
 
     const taskCategory =
-        document.getElementById(
-            "taskCategory"
-        );
+        document.getElementById("taskCategory");
 
 
-    const text =
-        taskInput.value.trim();
+    const text = taskInput.value.trim();
 
 
     if (text === "") {
 
-        alert(
-            "Please enter a task!"
-        );
+        alert("Please enter a task!");
 
         return;
-
     }
 
-
-    // Create task
 
     const newTask = {
 
@@ -196,19 +118,15 @@ function addTask() {
 
         time: taskTime.value,
 
-        priority:
-            taskPriority.value,
+        priority: taskPriority.value,
 
-        category:
-            taskCategory.value,
+        category: taskCategory.value,
 
         completed: false
-
     };
 
 
     tasks.push(newTask);
-
 
     saveTasks();
 
@@ -221,97 +139,51 @@ function addTask() {
 
     taskTime.value = "";
 
-    taskPriority.value =
-        "medium";
+    taskPriority.value = "medium";
 
-    taskCategory.value =
-        "study";
+    taskCategory.value = "study";
 
 
     renderTasks();
-
 }
 
 
-
-// =====================================
+// ===============================
 // CREATE TASK ELEMENT
-// =====================================
+// ===============================
 
 function createTaskElement(task) {
 
-    const li =
-        document.createElement("li");
+    const li = document.createElement("li");
+
+    li.classList.add("task");
 
 
-    li.className = "task";
+    // Priority
+
+    li.classList.add(
+        "priority-" + (task.priority || "medium")
+    );
 
 
-    // =================================
-    // COMPLETED CLASS
-    // =================================
+    // Completed
 
     if (task.completed) {
 
-        li.classList.add(
-            "completed"
-        );
-
+        li.classList.add("completed");
     }
 
 
-    // =================================
-    // PRIORITY CLASS
-    // =================================
-
-    if (task.priority === "high") {
-
-        li.classList.add(
-            "priority-high"
-        );
-
-    }
-
-    else if (
-        task.priority === "medium"
-    ) {
-
-        li.classList.add(
-            "priority-medium"
-        );
-
-    }
-
-    else {
-
-        li.classList.add(
-            "priority-low"
-        );
-
-    }
-
-
-
-    // =================================
+    // ===========================
     // CHECKBOX
-    // =================================
+    // ===========================
 
     const checkbox =
-        document.createElement(
-            "input"
-        );
+        document.createElement("input");
 
+    checkbox.type = "checkbox";
 
-    checkbox.type =
-        "checkbox";
-
-
-    checkbox.className =
-        "task-checkbox";
-
-
-    checkbox.checked =
-        task.completed;
+    checkbox.checked = task.completed;
 
 
     checkbox.addEventListener(
@@ -321,246 +193,167 @@ function createTaskElement(task) {
             task.completed =
                 checkbox.checked;
 
-
             saveTasks();
 
             renderTasks();
-
         }
     );
 
 
-
-    // =================================
-    // TASK CONTENT
-    // =================================
+    // ===========================
+    // CONTENT
+    // ===========================
 
     const content =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
+
+    content.classList.add("task-content");
 
 
-    content.className =
-        "task-content";
+    // Task text
+
+    const taskText =
+        document.createElement("div");
+
+    taskText.classList.add("task-text");
+
+    taskText.textContent = task.text;
 
 
+    // Information
 
-    // =================================
-    // TASK TEXT
-    // =================================
+    const info =
+        document.createElement("div");
 
-    const span =
-        document.createElement(
-            "span"
-        );
+    info.classList.add("task-info");
 
 
-    span.className =
-        "task-text";
+    // ===========================
+    // DATE
+    // ===========================
 
+    if (task.date) {
 
-    span.textContent =
-        task.text;
+        const date =
+            document.createElement("span");
 
+        date.classList.add("task-date");
 
+        date.textContent =
+            "📅 " + task.date;
 
-    // =================================
-    // DATE AND TIME
-    // =================================
-
-    const dateInfo =
-        document.createElement(
-            "small"
-        );
-
-
-    dateInfo.className =
-        "task-date";
-
-
-    if (
-        task.date ||
-        task.time
-    ) {
-
-        let dateText = "";
-
-
-        if (task.date) {
-
-            dateText +=
-                "📅 " + task.date;
-
-        }
-
-
-        if (task.time) {
-
-            dateText +=
-                "  ⏰ " + task.time;
-
-        }
-
-
-        dateInfo.textContent =
-            dateText;
-
-    }
-
-    else {
-
-        dateInfo.textContent =
-            "No due date";
-
+        info.appendChild(date);
     }
 
 
+    // ===========================
+    // TIME
+    // ===========================
 
-    // =================================
+    if (task.time) {
+
+        const time =
+            document.createElement("span");
+
+        time.classList.add("task-time");
+
+        time.textContent =
+            "⏰ " + task.time;
+
+        info.appendChild(time);
+    }
+
+
+    // ===========================
     // PRIORITY
-    // =================================
+    // ===========================
 
-    const priorityInfo =
-        document.createElement(
-            "small"
-        );
+    const priority =
+        document.createElement("span");
 
-
-    priorityInfo.className =
-        "task-priority";
+    priority.classList.add("task-priority");
 
 
-    if (
-        task.priority === "high"
-    ) {
+    if (task.priority === "high") {
 
-        priorityInfo.textContent =
-            "🔴 High Priority";
+        priority.textContent = "🔴 High";
 
-    }
+    } else if (task.priority === "low") {
 
-    else if (
-        task.priority === "low"
-    ) {
+        priority.textContent = "🟢 Low";
 
-        priorityInfo.textContent =
-            "🟢 Low Priority";
+    } else {
 
-    }
-
-    else {
-
-        priorityInfo.textContent =
-            "🟡 Medium Priority";
-
+        priority.textContent = "🟡 Medium";
     }
 
 
+    info.appendChild(priority);
 
-    // =================================
+
+    // ===========================
     // CATEGORY
-    // =================================
+    // ===========================
 
-    const categoryInfo =
-        document.createElement(
-            "small"
-        );
+    const category =
+        document.createElement("span");
 
-
-    categoryInfo.className =
-        "task-category";
+    category.classList.add("task-category");
 
 
-    if (
-        task.category === "study"
-    ) {
+    if (task.category === "study") {
 
-        categoryInfo.textContent =
-            "📚 Study";
+        category.textContent = "📚 Study";
 
-    }
+    } else if (task.category === "college") {
 
-    else if (
-        task.category === "college"
-    ) {
+        category.textContent = "🎓 College";
 
-        categoryInfo.textContent =
-            "🎓 College";
+    } else if (task.category === "project") {
 
-    }
+        category.textContent = "💻 Project";
 
-    else if (
-        task.category === "project"
-    ) {
+    } else if (task.category === "personal") {
 
-        categoryInfo.textContent =
-            "💻 Project";
+        category.textContent = "🏠 Personal";
 
-    }
+    } else {
 
-    else if (
-        task.category === "personal"
-    ) {
-
-        categoryInfo.textContent =
-            "🏠 Personal";
-
-    }
-
-    else {
-
-        categoryInfo.textContent =
-            "📌 Other";
-
+        category.textContent = "📌 Other";
     }
 
 
-
-    // =================================
-    // ADD CONTENT
-    // =================================
-
-    content.appendChild(
-        span
-    );
+    info.appendChild(category);
 
 
-    content.appendChild(
-        dateInfo
-    );
+    content.appendChild(taskText);
+
+    content.appendChild(info);
 
 
-    content.appendChild(
-        priorityInfo
-    );
+    // ===========================
+    // ACTIONS
+    // ===========================
+
+    const actions =
+        document.createElement("div");
+
+    actions.classList.add("task-actions");
 
 
-    content.appendChild(
-        categoryInfo
-    );
-
-
-
-    // =================================
+    // ===========================
     // EDIT BUTTON
-    // =================================
+    // ===========================
 
-    const editButton =
-        document.createElement(
-            "button"
-        );
+    const editBtn =
+        document.createElement("button");
 
+    editBtn.classList.add("edit-btn");
 
-    editButton.textContent =
-        "Edit";
+    editBtn.textContent = "✏️ Edit";
 
 
-    editButton.className =
-        "edit-btn";
-
-
-    editButton.addEventListener(
+    editBtn.addEventListener(
         "click",
         function () {
 
@@ -579,37 +372,27 @@ function createTaskElement(task) {
                 task.text =
                     newText.trim();
 
-
                 saveTasks();
 
                 renderTasks();
-
             }
-
         }
     );
 
 
-
-    // =================================
+    // ===========================
     // DELETE BUTTON
-    // =================================
+    // ===========================
 
-    const deleteButton =
-        document.createElement(
-            "button"
-        );
+    const deleteBtn =
+        document.createElement("button");
 
+    deleteBtn.classList.add("delete-btn");
 
-    deleteButton.textContent =
-        "Delete";
+    deleteBtn.textContent = "🗑️ Delete";
 
 
-    deleteButton.className =
-        "delete-btn";
-
-
-    deleteButton.addEventListener(
+    deleteBtn.addEventListener(
         "click",
         function () {
 
@@ -621,117 +404,93 @@ function createTaskElement(task) {
 
             if (confirmDelete) {
 
-                tasks =
-                    tasks.filter(
-                        item =>
-                            item.id !==
-                            task.id
-                    );
+                tasks = tasks.filter(
+                    function (item) {
+
+                        return item.id !== task.id;
+                    }
+                );
 
 
                 saveTasks();
 
                 renderTasks();
-
             }
-
         }
     );
 
 
+    actions.appendChild(editBtn);
 
-    // =================================
+    actions.appendChild(deleteBtn);
+
+
+    // ===========================
     // ADD EVERYTHING
-    // =================================
+    // ===========================
 
-    li.appendChild(
-        checkbox
-    );
+    li.appendChild(checkbox);
 
+    li.appendChild(content);
 
-    li.appendChild(
-        content
-    );
-
-
-    li.appendChild(
-        editButton
-    );
-
-
-    li.appendChild(
-        deleteButton
-    );
+    li.appendChild(actions);
 
 
     return li;
-
 }
 
 
-
-// =====================================
-// DISPLAY TASKS
-// =====================================
+// ===============================
+// RENDER TASKS
+// ===============================
 
 function renderTasks() {
 
     const taskList =
-        document.getElementById(
-            "taskList"
-        );
+        document.getElementById("taskList");
 
 
     taskList.innerHTML = "";
 
 
+    let filteredTasks = [...tasks];
 
-    // =================================
+
+    // ===========================
     // SEARCH
-    // =================================
+    // ===========================
 
-    let filteredTasks =
-        tasks.filter(
-            function (task) {
+    if (searchText !== "") {
 
-                return task.text
-                    .toLowerCase()
-                    .includes(
-                        searchText
-                            .toLowerCase()
-                    );
+        filteredTasks =
+            filteredTasks.filter(
+                function (task) {
 
-            }
-        );
+                    return task.text
+                        .toLowerCase()
+                        .includes(
+                            searchText.toLowerCase()
+                        );
+                }
+            );
+    }
 
 
+    // ===========================
+    // STATUS FILTER
+    // ===========================
 
-    // =================================
-    // ACTIVE FILTER
-    // =================================
-
-    if (
-        currentFilter === "active"
-    ) {
+    if (currentFilter === "active") {
 
         filteredTasks =
             filteredTasks.filter(
                 function (task) {
 
                     return !task.completed;
-
                 }
             );
 
-    }
-
-
-
-    // =================================
-    // COMPLETED FILTER
-    // =================================
-
-    if (
+    } else if (
         currentFilter === "completed"
     ) {
 
@@ -740,32 +499,45 @@ function renderTasks() {
                 function (task) {
 
                     return task.completed;
-
                 }
             );
-
     }
 
 
+    // ===========================
+    // CATEGORY FILTER
+    // ===========================
 
-    // =================================
-    // PRIORITY SORT
-    // =================================
+    if (currentCategory !== "all") {
 
-    if (
-        sortPriority === "high"
-    ) {
+        filteredTasks =
+            filteredTasks.filter(
+                function (task) {
 
-        const priorityOrder = {
+                    return (
+                        task.category ===
+                        currentCategory
+                    );
+                }
+            );
+    }
 
-            high: 1,
 
-            medium: 2,
+    // ===========================
+    // PRIORITY SORTING
+    // ===========================
 
-            low: 3
+    const priorityOrder = {
 
-        };
+        high: 1,
 
+        medium: 2,
+
+        low: 3
+    };
+
+
+    if (currentSortPriority === "high") {
 
         filteredTasks.sort(
             function (a, b) {
@@ -774,73 +546,49 @@ function renderTasks() {
                     priorityOrder[a.priority] -
                     priorityOrder[b.priority]
                 );
-
             }
         );
 
-    }
-
-
-    if (
-        sortPriority === "low"
+    } else if (
+        currentSortPriority === "low"
     ) {
-
-        const priorityOrder = {
-
-            high: 3,
-
-            medium: 2,
-
-            low: 1
-
-        };
-
 
         filteredTasks.sort(
             function (a, b) {
 
                 return (
-                    priorityOrder[a.priority] -
-                    priorityOrder[b.priority]
+                    priorityOrder[b.priority] -
+                    priorityOrder[a.priority]
                 );
-
             }
         );
-
     }
 
 
-
-    // =================================
+    // ===========================
     // DISPLAY TASKS
-    // =================================
+    // ===========================
 
     filteredTasks.forEach(
         function (task) {
 
             const taskElement =
-                createTaskElement(
-                    task
-                );
-
+                createTaskElement(task);
 
             taskList.appendChild(
                 taskElement
             );
-
         }
     );
 
 
     updateCounters();
-
 }
 
 
-
-// =====================================
-// FILTER BUTTONS
-// =====================================
+// ===============================
+// STATUS FILTER BUTTONS
+// ===============================
 
 const filterButtons =
     document.querySelectorAll(
@@ -855,17 +603,12 @@ filterButtons.forEach(
             "click",
             function () {
 
-                currentFilter =
-                    button.dataset.filter;
-
-
                 filterButtons.forEach(
                     function (btn) {
 
                         btn.classList.remove(
                             "active-filter"
                         );
-
                     }
                 );
 
@@ -875,19 +618,63 @@ filterButtons.forEach(
                 );
 
 
-                renderTasks();
+                currentFilter =
+                    button.dataset.filter;
 
+
+                renderTasks();
             }
         );
-
     }
 );
 
 
+// ===============================
+// CATEGORY FILTER BUTTONS
+// ===============================
 
-// =====================================
+const categoryButtons =
+    document.querySelectorAll(
+        ".category-btn"
+    );
+
+
+categoryButtons.forEach(
+    function (button) {
+
+        button.addEventListener(
+            "click",
+            function () {
+
+                categoryButtons.forEach(
+                    function (btn) {
+
+                        btn.classList.remove(
+                            "active-category"
+                        );
+                    }
+                );
+
+
+                button.classList.add(
+                    "active-category"
+                );
+
+
+                currentCategory =
+                    button.dataset.category;
+
+
+                renderTasks();
+            }
+        );
+    }
+);
+
+
+// ===============================
 // SEARCH
-// =====================================
+// ===============================
 
 const searchInput =
     document.getElementById(
@@ -902,17 +689,14 @@ searchInput.addEventListener(
         searchText =
             searchInput.value.trim();
 
-
         renderTasks();
-
     }
 );
 
 
-
-// =====================================
+// ===============================
 // PRIORITY SORT
-// =====================================
+// ===============================
 
 const sortPrioritySelect =
     document.getElementById(
@@ -924,55 +708,46 @@ sortPrioritySelect.addEventListener(
     "change",
     function () {
 
-        sortPriority =
+        currentSortPriority =
             sortPrioritySelect.value;
 
-
         renderTasks();
-
     }
 );
 
 
-
-// =====================================
+// ===============================
 // ADD BUTTON
-// =====================================
+// ===============================
 
-document.getElementById(
-    "addBtn"
-).addEventListener(
-    "click",
-    addTask
-);
+document
+    .getElementById("addBtn")
+    .addEventListener(
+        "click",
+        addTask
+    );
 
 
-
-// =====================================
+// ===============================
 // ENTER KEY
-// =====================================
+// ===============================
 
-document.getElementById(
-    "taskInput"
-).addEventListener(
-    "keydown",
-    function (event) {
+document
+    .getElementById("taskInput")
+    .addEventListener(
+        "keydown",
+        function (event) {
 
-        if (
-            event.key === "Enter"
-        ) {
+            if (event.key === "Enter") {
 
-            addTask();
-
+                addTask();
+            }
         }
-
-    }
-);
+    );
 
 
-
-// =====================================
+// ===============================
 // INITIAL DISPLAY
-// =====================================
+// ===============================
 
 renderTasks();
