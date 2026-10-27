@@ -4,135 +4,290 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>G.K.G. Arun Ragav - To-Do List</title>
+    <title>Arun Ragav | To-Do List</title>
+
+    <!-- Connect CSS correctly -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
+    <div class="app-container">
 
-    <header>
-        <div class="profile">
-            <img src="G.K.G.Arun Ragav.png" alt="Profile photo"
-                 onerror="this.style.display='none'">
-            <div>
-                <h1>My To-Do List</h1>
-                <p>G.K.G. Arun Ragav</p>
-                <span>B.Tech CSE (Applied AI)</span>
+        <!-- Header -->
+        <header class="app-header">
+            <div class="profile">
+                <img
+                    src="G.K.G.Arun Ragav.png"
+                    alt="Arun Ragav"
+                    class="profile-image"
+                    onerror="this.style.display='none'"
+                >
+
+                <div>
+                    <h1>My To-Do List</h1>
+                    <p>G.K.G. Arun Ragav | CSE (Applied AI)</p>
+                </div>
             </div>
-        </div>
-        <button id="themeBtn" class="theme-btn">🌙 Dark Mode</button>
-    </header>
 
-    <h2 class="section-title">➕ Add a New Task</h2>
+            <button type="button" id="themeToggle" class="theme-btn">
+                🌙 Dark Mode
+            </button>
+        </header>
 
-    <section class="add-task-section">
-        <input type="text" id="taskInput" placeholder="Enter your task..." autocomplete="off">
-        <input type="date" id="taskDate" aria-label="Due date">
-        <input type="time" id="taskTime" aria-label="Due time">
+        <!-- Dashboard counters -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <span>Total Tasks</span>
+                <strong id="totalCount">0</strong>
+            </div>
 
-        <select id="taskPriority" aria-label="Task priority">
-            <option value="high">🔴 High Priority</option>
-            <option value="medium" selected>🟡 Medium Priority</option>
-            <option value="low">🟢 Low Priority</option>
-        </select>
+            <div class="stat-card">
+                <span>Active Tasks</span>
+                <strong id="activeCount">0</strong>
+            </div>
 
-        <select id="taskCategory" aria-label="Task category">
-            <option value="study">📚 Study</option>
-            <option value="college">🎓 College</option>
-            <option value="project">💻 Project</option>
-            <option value="personal">🏠 Personal</option>
-            <option value="other">📌 Other</option>
-        </select>
+            <div class="stat-card">
+                <span>Completed</span>
+                <strong id="completedCount">0</strong>
+            </div>
+        </section>
 
-        <button id="addBtn">Add Task</button>
-    </section>
+        <!-- Deadline summary -->
+        <section class="deadline-summary">
+            <div class="deadline-card overdue-card">
+                <span>Overdue</span>
+                <strong id="overdueCount">0</strong>
+            </div>
 
-    <div class="search-section">
-        <input type="search" id="searchInput"
-               placeholder="🔎 Search tasks..." autocomplete="off">
+            <div class="deadline-card today-card">
+                <span>Due Today</span>
+                <strong id="todayCount">0</strong>
+            </div>
 
-        <select id="sortPriority" aria-label="Sort by priority">
-            <option value="default">↕️ Default Order</option>
-            <option value="high">🔴 High → Low</option>
-            <option value="low">🟢 Low → High</option>
-        </select>
+            <div class="deadline-card upcoming-card">
+                <span>Upcoming</span>
+                <strong id="upcomingCount">0</strong>
+            </div>
+        </section>
+
+        <!-- Add task -->
+        <section class="panel">
+            <h2>➕ Add a New Task</h2>
+
+            <form id="taskForm">
+                <div class="form-group">
+                    <label for="taskInput">Task Name</label>
+                    <input
+                        type="text"
+                        id="taskInput"
+                        placeholder="What do you need to do?"
+                        maxlength="200"
+                        required
+                    >
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="taskDate">Due Date</label>
+                        <input type="date" id="taskDate">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taskTime">Due Time</label>
+                        <input type="time" id="taskTime">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taskPriority">Priority</label>
+                        <select id="taskPriority">
+                            <option value="high">High</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taskCategory">Category</label>
+                        <select id="taskCategory">
+                            <option value="study" selected>Study</option>
+                            <option value="college">College</option>
+                            <option value="project">Project</option>
+                            <option value="personal">Personal</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="primary-btn">
+                    + Add Task
+                </button>
+            </form>
+        </section>
+
+        <!-- Edit task -->
+        <section class="panel edit-panel" id="editTaskSection" hidden>
+            <h2>✏️ Edit Task</h2>
+
+            <input type="hidden" id="editTaskId">
+
+            <div class="form-group">
+                <label for="editTaskInput">Task Name</label>
+                <input
+                    type="text"
+                    id="editTaskInput"
+                    maxlength="200"
+                    required
+                >
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="editTaskDate">Due Date</label>
+                    <input type="date" id="editTaskDate">
+                </div>
+
+                <div class="form-group">
+                    <label for="editTaskTime">Due Time</label>
+                    <input type="time" id="editTaskTime">
+                </div>
+
+                <div class="form-group">
+                    <label for="editTaskPriority">Priority</label>
+                    <select id="editTaskPriority">
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="editTaskCategory">Category</label>
+                    <select id="editTaskCategory">
+                        <option value="study">Study</option>
+                        <option value="college">College</option>
+                        <option value="project">Project</option>
+                        <option value="personal">Personal</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="button-row">
+                <button type="button" id="saveEditBtn" class="primary-btn">
+                    Save Changes
+                </button>
+
+                <button type="button" id="cancelEditBtn" class="secondary-btn">
+                    Cancel
+                </button>
+            </div>
+        </section>
+
+        <!-- Search and sorting -->
+        <section class="panel">
+            <h2>🔍 Find Your Tasks</h2>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="searchInput">Search</label>
+                    <input
+                        type="search"
+                        id="searchInput"
+                        placeholder="Search tasks..."
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="sortPriority">Sort by Priority</label>
+                    <select id="sortPriority">
+                        <option value="default">Newest First</option>
+                        <option value="high-to-low">High to Low</option>
+                        <option value="low-to-high">Low to High</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="dueFilter">Deadline Filter</label>
+                    <select id="dueFilter">
+                        <option value="all">All Deadlines</option>
+                        <option value="overdue">Overdue</option>
+                        <option value="today">Due Today</option>
+                        <option value="upcoming">Upcoming</option>
+                        <option value="no-date">No Deadline</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Status filters -->
+        <section class="panel">
+            <h2>📋 Task Status</h2>
+
+            <div class="filter-row">
+                <button type="button" class="filter-btn active" data-filter="all">
+                    All
+                </button>
+
+                <button type="button" class="filter-btn" data-filter="active">
+                    Active
+                </button>
+
+                <button type="button" class="filter-btn" data-filter="completed">
+                    Completed
+                </button>
+            </div>
+
+            <h3 class="subheading">Filter by Category</h3>
+
+            <div class="filter-row">
+                <button type="button" class="category-filter active" data-category="all">
+                    All Categories
+                </button>
+
+                <button type="button" class="category-filter" data-category="study">
+                    Study
+                </button>
+
+                <button type="button" class="category-filter" data-category="college">
+                    College
+                </button>
+
+                <button type="button" class="category-filter" data-category="project">
+                    Project
+                </button>
+
+                <button type="button" class="category-filter" data-category="personal">
+                    Personal
+                </button>
+
+                <button type="button" class="category-filter" data-category="other">
+                    Other
+                </button>
+            </div>
+        </section>
+
+        <!-- Task list -->
+        <section class="panel">
+            <div class="list-heading">
+                <h2>📝 My Tasks</h2>
+                <span class="list-note">Your tasks are saved in this browser.</span>
+            </div>
+
+            <ul id="taskList" class="task-list"></ul>
+
+            <p id="emptyMessage" class="empty-message">
+                No tasks found. Add a new task to get started!
+            </p>
+        </section>
+
+        <footer>
+            <p>Made with ❤️ by G.K.G. Arun Ragav</p>
+            <p>Stay focused. Complete your goals. 🚀</p>
+        </footer>
+
     </div>
 
-    <div class="filters">
-        <button class="filter-btn active-filter" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="active">Active</button>
-        <button class="filter-btn" data-filter="completed">Completed</button>
-    </div>
-
-    <section class="category-filters">
-        <h3>Filter by Category</h3>
-        <div class="category-buttons">
-            <button class="category-btn active-category" data-category="all">📋 All Categories</button>
-            <button class="category-btn" data-category="study">📚 Study</button>
-            <button class="category-btn" data-category="college">🎓 College</button>
-            <button class="category-btn" data-category="project">💻 Project</button>
-            <button class="category-btn" data-category="personal">🏠 Personal</button>
-            <button class="category-btn" data-category="other">📌 Other</button>
-        </div>
-    </section>
-
-    <div class="stats">
-        <div class="stat-box">
-            <h3 id="totalCount">0</h3>
-            <p>Total Tasks</p>
-        </div>
-        <div class="stat-box">
-            <h3 id="activeCount">0</h3>
-            <p>Active Tasks</p>
-        </div>
-        <div class="stat-box">
-            <h3 id="completedCount">0</h3>
-            <p>Completed Tasks</p>
-        </div>
-    </div>
-
-    <!-- V17 EDIT FORM -->
-    <section id="editTaskSection" class="edit-task-section" hidden>
-        <h2>✏️ Edit Task</h2>
-
-        <input type="hidden" id="editTaskId">
-
-        <input type="text" id="editTaskInput" placeholder="Task name">
-
-        <input type="date" id="editTaskDate" aria-label="Edit due date">
-
-        <input type="time" id="editTaskTime" aria-label="Edit due time">
-
-        <select id="editTaskPriority" aria-label="Edit priority">
-            <option value="high">🔴 High Priority</option>
-            <option value="medium">🟡 Medium Priority</option>
-            <option value="low">🟢 Low Priority</option>
-        </select>
-
-        <select id="editTaskCategory" aria-label="Edit category">
-            <option value="study">📚 Study</option>
-            <option value="college">🎓 College</option>
-            <option value="project">💻 Project</option>
-            <option value="personal">🏠 Personal</option>
-            <option value="other">📌 Other</option>
-        </select>
-
-        <div class="edit-task-actions">
-            <button type="button" id="saveEditBtn">💾 Save Changes</button>
-            <button type="button" id="cancelEditBtn">Cancel</button>
-        </div>
-    </section>
-
-    <ul id="taskList"></ul>
-    <p id="emptyMessage" class="empty-message">No tasks found. Add your first task!</p>
-
-    <footer>
-        <p>Built by G.K.G. Arun Ragav | V17 To-Do List</p>
-    </footer>
-
-</div>
-
-<script src="app.js"></script>
+    <!-- Connect JavaScript correctly -->
+    <script src="app.js"></script>
 </body>
 </html>
