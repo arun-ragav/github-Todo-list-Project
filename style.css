@@ -1,5 +1,8 @@
 
-/* ===== General ===== */
+/* =================================
+   V19 TO-DO LIST - MAIN STYLES
+================================= */
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -47,7 +50,8 @@ select:focus-visible {
     margin: 30px auto;
 }
 
-/* ===== Header ===== */
+/* HEADER */
+
 .app-header {
     display: flex;
     justify-content: space-between;
@@ -107,7 +111,8 @@ h1 {
     opacity: 0.8;
 }
 
-/* ===== Dashboard ===== */
+/* TASK COUNTERS */
+
 .stats-grid,
 .deadline-summary {
     display: grid;
@@ -162,7 +167,8 @@ h1 {
     border-left-color: #16875d;
 }
 
-/* ===== Panels ===== */
+/* GENERAL PANELS */
+
 .panel {
     background: var(--surface);
     padding: 24px;
@@ -191,7 +197,8 @@ h1 {
     display: none !important;
 }
 
-/* ===== Forms ===== */
+/* FORMS */
+
 .form-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -246,7 +253,8 @@ h1 {
     gap: 10px;
 }
 
-/* ===== Filters ===== */
+/* FILTERS */
+
 .filter-row {
     display: flex;
     flex-wrap: wrap;
@@ -271,7 +279,8 @@ h1 {
     transform: translateY(-1px);
 }
 
-/* ===== Task list ===== */
+/* TASK LIST */
+
 .list-heading {
     display: flex;
     justify-content: space-between;
@@ -427,6 +436,103 @@ h1 {
     padding: 25px 10px;
 }
 
+/* V19 PROGRESS DASHBOARD */
+
+.progress-overview {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 18px;
+}
+
+.progress-overview p {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.progress-overview #progressPercentage {
+    font-size: 2.3rem;
+    color: #16a36a;
+    margin: 5px 0;
+}
+
+.progress-details {
+    display: grid;
+    gap: 5px;
+}
+
+.progress-details strong {
+    color: var(--text);
+}
+
+.progress-track {
+    width: 100%;
+    height: 14px;
+    border-radius: 20px;
+    background: #e5e9f0;
+    overflow: hidden;
+    margin-bottom: 25px;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: #16a36a;
+    border-radius: 20px;
+    transition: width 0.4s ease;
+}
+
+.category-progress-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.category-progress-item {
+    padding: 14px;
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+.category-progress-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 9px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.category-progress-heading span:last-child {
+    color: var(--muted);
+}
+
+.category-progress-track {
+    height: 9px;
+    background: #e0e5ed;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.category-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: #3985dc;
+    border-radius: 20px;
+    transition: width 0.4s ease;
+}
+
+.category-progress-info {
+    margin-top: 7px;
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+/* FOOTER */
+
 footer {
     text-align: center;
     color: var(--muted);
@@ -434,7 +540,8 @@ footer {
     font-size: 0.9rem;
 }
 
-/* ===== Dark mode ===== */
+/* DARK MODE */
+
 body.dark-mode {
     --background: #111827;
     --surface: #1f2937;
@@ -492,7 +599,13 @@ body.dark-mode .status-no-date {
     color: #d1d5db;
 }
 
-/* ===== Mobile responsive ===== */
+body.dark-mode .progress-track,
+body.dark-mode .category-progress-track {
+    background: #374151;
+}
+
+/* RESPONSIVE DESIGN */
+
 @media (max-width: 700px) {
     .app-container {
         width: 94%;
@@ -552,6 +665,15 @@ body.dark-mode .status-no-date {
 
     .task-actions button {
         flex: 1;
+    }
+
+    .category-progress-list {
+        grid-template-columns: 1fr;
+    }
+
+    .progress-overview {
+        align-items: flex-start;
+        flex-direction: column;
     }
 }
 
