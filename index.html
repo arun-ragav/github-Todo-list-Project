@@ -4,112 +4,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arun Ragav | To-Do List</title>
-
-    <!-- Connect CSS correctly -->
+    <title>My To-Do List | V20</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <div class="app-container">
+    <div class="container">
 
         <!-- Header -->
-        <header class="app-header">
+        <header class="header">
             <div class="profile">
-                <img
-                    src="G.K.G.Arun Ragav.png"
-                    alt="Arun Ragav"
-                    class="profile-image"
-                    onerror="this.style.display='none'"
-                >
-
+                <img src="G.K.G.Arun Ragav.png" alt="Profile">
                 <div>
                     <h1>My To-Do List</h1>
-                    <p>G.K.G. Arun Ragav | CSE (Applied AI)</p>
+                    <p>G.K.G. Arun Ragav | V20 Calendar View</p>
                 </div>
             </div>
 
-            <button type="button" id="themeToggle" class="theme-btn">
+            <button id="themeToggle" class="theme-btn">
                 🌙 Dark Mode
             </button>
         </header>
 
-        <!-- Dashboard counters -->
-        <section class="stats-grid">
+        <!-- Counters -->
+        <section class="stats">
             <div class="stat-card">
-                <span>Total Tasks</span>
-                <strong id="totalCount">0</strong>
+                <h3>Total Tasks</h3>
+                <p id="totalTasks">0</p>
             </div>
 
             <div class="stat-card">
-                <span>Active Tasks</span>
-                <strong id="activeCount">0</strong>
+                <h3>Active</h3>
+                <p id="activeTasks">0</p>
             </div>
 
             <div class="stat-card">
-                <span>Completed</span>
-                <strong id="completedCount">0</strong>
+                <h3>Completed</h3>
+                <p id="completedTasks">0</p>
             </div>
         </section>
 
-        <!-- Deadline summary -->
-        <section class="deadline-summary">
-            <div class="deadline-card overdue-card">
-                <span>Overdue</span>
-                <strong id="overdueCount">0</strong>
-            </div>
-
-            <div class="deadline-card today-card">
-                <span>Due Today</span>
-                <strong id="todayCount">0</strong>
-            </div>
-
-            <div class="deadline-card upcoming-card">
-                <span>Upcoming</span>
-                <strong id="upcomingCount">0</strong>
-            </div>
-        </section>
-
-        <!-- Add task -->
+        <!-- Deadline Summary -->
         <section class="panel">
-            <h2>➕ Add a New Task</h2>
+            <h2>Deadline Summary</h2>
 
-            <form id="taskForm">
-                <div class="form-group">
-                    <label for="taskInput">Task Name</label>
-                    <input
-                        type="text"
-                        id="taskInput"
-                        placeholder="What do you need to do?"
-                        maxlength="200"
-                        required
-                    >
+            <div class="deadline-summary">
+                <div>
+                    <span class="overdue-dot"></span>
+                    Overdue: <strong id="overdueCount">0</strong>
                 </div>
 
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="taskDate">Due Date</label>
-                        <input type="date" id="taskDate">
+                <div>
+                    <span class="today-dot"></span>
+                    Due Today: <strong id="todayCount">0</strong>
+                </div>
+
+                <div>
+                    <span class="upcoming-dot"></span>
+                    Upcoming: <strong id="upcomingCount">0</strong>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress Dashboard -->
+        <section class="panel">
+            <h2>Progress Dashboard</h2>
+
+            <div class="progress-info">
+                <h3 id="progressPercentage">0% Completed</h3>
+                <p id="progressTotal">Total Tasks: 0</p>
+                <p id="progressCompleted">Completed: 0</p>
+                <p id="progressRemaining">Remaining: 0</p>
+            </div>
+
+            <div class="progress-track">
+                <div id="overallProgressBar" class="progress-fill"></div>
+            </div>
+
+            <h3 class="category-progress-heading">Category Progress</h3>
+            <div id="categoryProgressList"></div>
+        </section>
+
+        <!-- V20 Calendar -->
+        <section class="panel calendar-panel">
+
+            <div class="calendar-heading">
+                <h2>Task Calendar</h2>
+
+                <div class="calendar-controls">
+                    <button id="prevMonth">❮</button>
+                    <button id="todayButton">Today</button>
+                    <button id="nextMonth">❯</button>
+                </div>
+            </div>
+
+            <h3 id="monthYear" class="month-year"></h3>
+
+            <div class="calendar-grid calendar-weekdays">
+                <div>Sun</div>
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thu</div>
+                <div>Fri</div>
+                <div>Sat</div>
+            </div>
+
+            <div id="calendarDays" class="calendar-grid calendar-days"></div>
+
+            <div class="calendar-legend">
+                <span><i class="legend-today"></i> Today</span>
+                <span><i class="legend-task"></i> Has tasks</span>
+                <span><i class="legend-selected"></i> Selected date</span>
+            </div>
+
+            <div class="selected-date-section">
+                <h3 id="selectedDateTitle">Tasks for selected date</h3>
+                <div id="calendarTaskList">
+                    <p class="empty-message">Select a date to view its tasks.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Add Task -->
+        <section class="panel">
+            <h2>Add New Task</h2>
+
+            <form id="taskForm">
+
+                <input
+                    type="text"
+                    id="taskInput"
+                    placeholder="Enter your task"
+                    required
+                >
+
+                <div class="form-row">
+                    <div>
+                        <label for="dueDate">Due Date</label>
+                        <input type="date" id="dueDate">
                     </div>
 
-                    <div class="form-group">
-                        <label for="taskTime">Due Time</label>
-                        <input type="time" id="taskTime">
+                    <div>
+                        <label for="dueTime">Due Time</label>
+                        <input type="time" id="dueTime">
                     </div>
+                </div>
 
-                    <div class="form-group">
-                        <label for="taskPriority">Priority</label>
-                        <select id="taskPriority">
-                            <option value="high">High</option>
-                            <option value="medium" selected>Medium</option>
+                <div class="form-row">
+                    <div>
+                        <label for="priority">Priority</label>
+                        <select id="priority">
                             <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label for="taskCategory">Category</label>
-                        <select id="taskCategory">
-                            <option value="study" selected>Study</option>
+                    <div>
+                        <label for="category">Category</label>
+                        <select id="category">
+                            <option value="study">Study</option>
                             <option value="college">College</option>
                             <option value="project">Project</option>
                             <option value="personal">Personal</option>
@@ -118,176 +174,130 @@
                     </div>
                 </div>
 
-                <button type="submit" class="primary-btn">
-                    + Add Task
-                </button>
+                <button type="submit" class="primary-btn">+ Add Task</button>
             </form>
         </section>
 
-        <!-- Edit task -->
-        <section class="panel edit-panel" id="editTaskSection" hidden>
-            <h2>✏️ Edit Task</h2>
+        <!-- Edit Task -->
+        <section id="editSection" class="panel hidden">
+            <h2>Edit Task</h2>
 
-            <input type="hidden" id="editTaskId">
+            <form id="editForm">
+                <input type="text" id="editTaskInput" required>
 
-            <div class="form-group">
-                <label for="editTaskInput">Task Name</label>
-                <input
-                    type="text"
-                    id="editTaskInput"
-                    maxlength="200"
-                    required
-                >
-            </div>
+                <div class="form-row">
+                    <div>
+                        <label for="editDueDate">Due Date</label>
+                        <input type="date" id="editDueDate">
+                    </div>
 
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="editTaskDate">Due Date</label>
-                    <input type="date" id="editTaskDate">
+                    <div>
+                        <label for="editDueTime">Due Time</label>
+                        <input type="time" id="editDueTime">
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="editTaskTime">Due Time</label>
-                    <input type="time" id="editTaskTime">
+                <div class="form-row">
+                    <div>
+                        <label for="editPriority">Priority</label>
+                        <select id="editPriority">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="editCategory">Category</label>
+                        <select id="editCategory">
+                            <option value="study">Study</option>
+                            <option value="college">College</option>
+                            <option value="project">Project</option>
+                            <option value="personal">Personal</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="editTaskPriority">Priority</label>
-                    <select id="editTaskPriority">
-                        <option value="high">High</option>
-                        <option value="medium">Medium</option>
-                        <option value="low">Low</option>
-                    </select>
+                <div class="form-actions">
+                    <button type="submit" class="primary-btn">Save Changes</button>
+                    <button type="button" id="cancelEdit" class="secondary-btn">
+                        Cancel
+                    </button>
                 </div>
-
-                <div class="form-group">
-                    <label for="editTaskCategory">Category</label>
-                    <select id="editTaskCategory">
-                        <option value="study">Study</option>
-                        <option value="college">College</option>
-                        <option value="project">Project</option>
-                        <option value="personal">Personal</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="button-row">
-                <button type="button" id="saveEditBtn" class="primary-btn">
-                    Save Changes
-                </button>
-
-                <button type="button" id="cancelEditBtn" class="secondary-btn">
-                    Cancel
-                </button>
-            </div>
+            </form>
         </section>
 
-        <!-- Search and sorting -->
+        <!-- Search and Sorting -->
         <section class="panel">
-            <h2>🔍 Find Your Tasks</h2>
+            <h2>Manage Tasks</h2>
 
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="searchInput">Search</label>
-                    <input
-                        type="search"
-                        id="searchInput"
-                        placeholder="Search tasks..."
-                    >
-                </div>
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search tasks..."
+            >
 
-                <div class="form-group">
-                    <label for="sortPriority">Sort by Priority</label>
-                    <select id="sortPriority">
-                        <option value="default">Newest First</option>
-                        <option value="high-to-low">High to Low</option>
-                        <option value="low-to-high">Low to High</option>
+            <div class="form-row">
+                <div>
+                    <label for="prioritySort">Sort by Priority</label>
+                    <select id="prioritySort">
+                        <option value="none">Default</option>
+                        <option value="high">High to Low</option>
+                        <option value="low">Low to High</option>
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label for="dueFilter">Deadline Filter</label>
-                    <select id="dueFilter">
+                <div>
+                    <label for="deadlineFilter">Deadline</label>
+                    <select id="deadlineFilter">
                         <option value="all">All Deadlines</option>
                         <option value="overdue">Overdue</option>
                         <option value="today">Due Today</option>
                         <option value="upcoming">Upcoming</option>
-                        <option value="no-date">No Deadline</option>
+                        <option value="no-date">No Due Date</option>
                     </select>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <h3>Status Filter</h3>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="active">Active</button>
+                    <button class="filter-btn" data-filter="completed">Completed</button>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <h3>Category Filter</h3>
+                <div class="filter-buttons">
+                    <button class="category-filter active" data-category="all">All</button>
+                    <button class="category-filter" data-category="study">Study</button>
+                    <button class="category-filter" data-category="college">College</button>
+                    <button class="category-filter" data-category="project">Project</button>
+                    <button class="category-filter" data-category="personal">Personal</button>
+                    <button class="category-filter" data-category="other">Other</button>
                 </div>
             </div>
         </section>
 
-        <!-- Status filters -->
+        <!-- Task List -->
         <section class="panel">
-            <h2>📋 Task Status</h2>
-
-            <div class="filter-row">
-                <button type="button" class="filter-btn active" data-filter="all">
-                    All
-                </button>
-
-                <button type="button" class="filter-btn" data-filter="active">
-                    Active
-                </button>
-
-                <button type="button" class="filter-btn" data-filter="completed">
-                    Completed
-                </button>
-            </div>
-
-            <h3 class="subheading">Filter by Category</h3>
-
-            <div class="filter-row">
-                <button type="button" class="category-filter active" data-category="all">
-                    All Categories
-                </button>
-
-                <button type="button" class="category-filter" data-category="study">
-                    Study
-                </button>
-
-                <button type="button" class="category-filter" data-category="college">
-                    College
-                </button>
-
-                <button type="button" class="category-filter" data-category="project">
-                    Project
-                </button>
-
-                <button type="button" class="category-filter" data-category="personal">
-                    Personal
-                </button>
-
-                <button type="button" class="category-filter" data-category="other">
-                    Other
-                </button>
-            </div>
-        </section>
-
-        <!-- Task list -->
-        <section class="panel">
-            <div class="list-heading">
-                <h2>📝 My Tasks</h2>
-                <span class="list-note">Your tasks are saved in this browser.</span>
-            </div>
-
-            <ul id="taskList" class="task-list"></ul>
-
+            <h2>My Tasks</h2>
+            <div id="taskList"></div>
             <p id="emptyMessage" class="empty-message">
-                No tasks found. Add a new task to get started!
+                No tasks found. Add your first task!
             </p>
         </section>
 
         <footer>
-            <p>Made with ❤️ by G.K.G. Arun Ragav</p>
-            <p>Stay focused. Complete your goals. 🚀</p>
+            <p>My To-Do List | V20 Calendar View</p>
+            <p>Stay organized. Complete your goals.</p>
         </footer>
 
     </div>
 
-    <!-- Connect JavaScript correctly -->
     <script src="app.js"></script>
 </body>
 </html>
