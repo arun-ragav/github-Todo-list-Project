@@ -1,9 +1,8 @@
 
 // =====================================
-// MY TO-DO LIST - V20 CALENDAR VIEW
+// MY TO-DO LIST - V21 WEEKLY SCHEDULER
 // =====================================
 
-// Labels
 const categoryLabels = {
     study: "Study",
     college: "College",
@@ -68,17 +67,18 @@ const progressRemaining = document.getElementById("progressRemaining");
 const overallProgressBar = document.getElementById("overallProgressBar");
 const categoryProgressList = document.getElementById("categoryProgressList");
 
-// Calendar elements
-const monthYear = document.getElementById("monthYear");
-const calendarDays = document.getElementById("calendarDays");
-const prevMonth = document.getElementById("prevMonth");
-const nextMonth = document.getElementById("nextMonth");
-const todayButton = document.getElementById("todayButton");
-const selectedDateTitle = document.getElementById("selectedDateTitle");
-const calendarTaskList = document.getElementById("calendarTaskList");
+// Weekly calendar elements
+const weekGrid = document.getElementById("weekGrid");
+const weekRange = document.getElementById("weekRange");
+const prevWeek = document.getElementById("prevWeek");
+const nextWeek = document.getElementById("nextWeek");
+const thisWeek = document.getElementById("thisWeek");
+const selectedDayTitle = document.getElementById("selectedDayTitle");
+const dailyTaskCount = document.getElementById("dailyTaskCount");
+const weeklyTaskList = document.getElementById("weeklyTaskList");
 
 // =====================================
-// DATA
+// DATA AND STATE
 // =====================================
 
 let tasks = loadTasks();
@@ -87,12 +87,11 @@ let currentFilter = "all";
 let currentCategory = "all";
 let editingTaskId = null;
 
-// Calendar state
 const today = new Date();
 today.setHours(0, 0, 0, 0);
 
-let calendarMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 let selectedDate = getDateKey(today);
+let weekStart = getWeekStart(today);
 
 // =====================================
 // LOCAL STORAGE
@@ -102,9 +101,7 @@ function loadTasks() {
     try {
         const savedTasks = JSON.parse(localStorage.getItem("tasks"));
 
-        if (!Array.isArray(savedTasks)) {
-            return [];
-        }
+        if (!Array.isArray(savedTasks)) return [];
 
         return savedTasks
             .filter(task => task && typeof task === "object")
@@ -132,7 +129,7 @@ function saveTasks() {
 }
 
 // =====================================
-// DATE HELPERS
+// DATE FUNCTIONS
 // =====================================
 
 function getDateKey(date) {
@@ -147,13 +144,18 @@ function getTodayKey() {
     return getDateKey(new Date());
 }
 
+function parseDate(dateString) {
+    if (!dateString) return null;
+
+    const [year, month, day] = dateString.split("-").map(Number);
+
+    return new Date(year, month - 1, day);
+}
+
 function formatDate(dateString) {
     if (!dateString) return "No due date";
 
-    const parts = dateString.split("-").map(Number);
-    const date = new Date(parts[0], parts[1] - 1, parts[2]);
-
-    return date.toLocaleDateString("en-IN", {
+    return parseDate(dateString).toLocaleDateString("en-IN", {
         day: "numeric",
         month: "short",
         year: "numeric"
@@ -184,6 +186,34 @@ function getDeadlineText(task) {
     return text;
 }
 
+// Sunday is the first day of the week.
+function getWeekStart(date) {
+    const result = new Date(date);
+
+    result.setHours(0, 0, 0, 0);
+    result.setDate(result.getDate() - result.getDay());
+
+    return result;
+}
+
+function formatWeekRange(start) {
+    const end = new Date(start);
+    end.setDate(start.getDate() + 6);
+
+    const first = start.toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "short"
+    });
+
+    const last = end.toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+    });
+
+    return `${first} - ${last}`;
+}
+
 // =====================================
 // ADD TASK
 // =====================================
@@ -211,16 +241,14 @@ taskForm.addEventListener("submit", function(event) {
     tasks.push(newTask);
 
     saveTasks();
-    taskForm.reset();
 
-    // Select the new task's date in the calendar
+    // If a due date exists, show its week.
     if (newTask.dueDate) {
         selectedDate = newTask.dueDate;
-
-        const parts = selectedDate.split("-").map(Number);
-        calendarMonth = new Date(parts[0], parts[1] - 1, 1);
+        weekStart = getWeekStart(parseDate(newTask.dueDate));
     }
 
+    taskForm.reset();
     renderAll();
 });
 
@@ -229,9 +257,9 @@ taskForm.addEventListener("submit", function(event) {
 // =====================================
 
 function deleteTask(id) {
-    const confirmDelete = confirm("Are you sure you want to delete this task?");
-
-    if (!confirmDelete) return;
+    if (!confirm("Are you sure you want to delete this task?")) {
+        return;
+    }
 
     tasks = tasks.filter(task => task.id !== id);
 
@@ -244,7 +272,7 @@ function deleteTask(id) {
 }
 
 // =====================================
-// COMPLETE / UNCOMPLETE TASK
+// COMPLETE TASK
 // =====================================
 
 function toggleTask(id) {
@@ -327,7 +355,7 @@ cancelEdit.addEventListener("click", closeEditForm);
 // CREATE TASK CARD
 // =====================================
 
-function createTaskElement(task) {
+function createTaskElement(task, showTime = false) {
     const card = document.createElement("div");
     card.className = "task-card";
 
@@ -372,6 +400,15 @@ function createTaskElement(task) {
 
     meta.append(priorityTag, categoryTag, deadlineTag);
 
+    if (showTime && task.dueTime) {
+        const time = document.createElement("p");
+        time.className = "weekly-task-time";
+        time.textContent = "🕒 " + task.dueTime;
+        card.append(title, time, meta);
+    } else {
+        card.append(title, meta);
+    }
+
     const actions = document.createElement("div");
     actions.className = "task-actions";
 
@@ -391,14 +428,13 @@ function createTaskElement(task) {
     deleteButton.addEventListener("click", () => deleteTask(task.id));
 
     actions.append(completeButton, editButton, deleteButton);
-
-    card.append(title, meta, actions);
+    card.appendChild(actions);
 
     return card;
 }
 
 // =====================================
-// DISPLAY TASKS
+// DISPLAY ALL TASKS
 // =====================================
 
 function renderTasks() {
@@ -406,7 +442,6 @@ function renderTasks() {
 
     let filteredTasks = [...tasks];
 
-    // Status filter
     if (currentFilter === "active") {
         filteredTasks = filteredTasks.filter(task => !task.completed);
     }
@@ -415,14 +450,12 @@ function renderTasks() {
         filteredTasks = filteredTasks.filter(task => task.completed);
     }
 
-    // Category filter
     if (currentCategory !== "all") {
         filteredTasks = filteredTasks.filter(
             task => task.category === currentCategory
         );
     }
 
-    // Search
     const searchText = searchInput.value.trim().toLowerCase();
 
     if (searchText) {
@@ -431,7 +464,6 @@ function renderTasks() {
         );
     }
 
-    // Deadline filter
     const selectedDeadline = deadlineFilter.value;
 
     if (selectedDeadline !== "all") {
@@ -440,7 +472,6 @@ function renderTasks() {
         );
     }
 
-    // Priority sorting
     if (prioritySort.value === "high") {
         filteredTasks.sort(
             (a, b) => priorityOrder[b.priority] - priorityOrder[a.priority]
@@ -556,7 +587,7 @@ function updateProgressDashboard() {
 }
 
 // =====================================
-// STATUS FILTER BUTTONS
+// STATUS FILTERS
 // =====================================
 
 document.querySelectorAll(".filter-btn").forEach(button => {
@@ -573,7 +604,7 @@ document.querySelectorAll(".filter-btn").forEach(button => {
 });
 
 // =====================================
-// CATEGORY FILTER BUTTONS
+// CATEGORY FILTERS
 // =====================================
 
 document.querySelectorAll(".category-filter").forEach(button => {
@@ -602,17 +633,14 @@ deadlineFilter.addEventListener("change", renderTasks);
 // =====================================
 
 function updateThemeButton() {
-    if (document.body.classList.contains("dark-mode")) {
-        themeToggle.textContent = "☀️ Light Mode";
-    } else {
-        themeToggle.textContent = "🌙 Dark Mode";
-    }
+    themeToggle.textContent =
+        document.body.classList.contains("dark-mode")
+            ? "☀️ Light Mode"
+            : "🌙 Dark Mode";
 }
 
 function loadTheme() {
-    const savedTheme = localStorage.getItem("theme");
-
-    if (savedTheme === "dark") {
+    if (localStorage.getItem("theme") === "dark") {
         document.body.classList.add("dark-mode");
     }
 
@@ -630,145 +658,145 @@ themeToggle.addEventListener("click", function() {
 });
 
 // =====================================
-// V20 CALENDAR VIEW
+// V21 WEEKLY CALENDAR
 // =====================================
 
-function renderCalendar() {
-    calendarDays.innerHTML = "";
+function renderWeeklyCalendar() {
+    weekGrid.innerHTML = "";
 
-    const year = calendarMonth.getFullYear();
-    const month = calendarMonth.getMonth();
+    const endOfWeek = new Date(weekStart);
+    endOfWeek.setDate(weekStart.getDate() + 6);
 
-    const firstDay = new Date(year, month, 1).getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    weekRange.textContent = formatWeekRange(weekStart);
 
-    monthYear.textContent = calendarMonth.toLocaleDateString("en-IN", {
-        month: "long",
-        year: "numeric"
-    });
+    for (let i = 0; i < 7; i++) {
+        const date = new Date(weekStart);
+        date.setDate(weekStart.getDate() + i);
 
-    // Empty cells before the first day
-    for (let i = 0; i < firstDay; i++) {
-        const emptyCell = document.createElement("div");
-        emptyCell.className = "calendar-day empty";
-        calendarDays.appendChild(emptyCell);
-    }
-
-    // Calendar dates
-    for (let day = 1; day <= daysInMonth; day++) {
-        const date = new Date(year, month, day);
         const dateKey = getDateKey(date);
 
         const dayTasks = tasks.filter(
             task => task.dueDate === dateKey
         );
 
-        const cell = document.createElement("button");
-        cell.type = "button";
-        cell.className = "calendar-day";
-
-        const number = document.createElement("span");
-        number.className = "day-number";
-        number.textContent = day;
-
-        cell.appendChild(number);
+        const dayButton = document.createElement("button");
+        dayButton.type = "button";
+        dayButton.className = "week-day";
 
         if (dateKey === getTodayKey()) {
-            cell.classList.add("today");
+            dayButton.classList.add("today");
         }
 
         if (dateKey === selectedDate) {
-            cell.classList.add("selected");
+            dayButton.classList.add("selected");
         }
 
-        if (dayTasks.length > 0) {
-            cell.classList.add("has-tasks");
-
-            const dots = document.createElement("span");
-            dots.className = "task-dots";
-
-            // Show up to three dots
-            for (let i = 0; i < Math.min(dayTasks.length, 3); i++) {
-                const dot = document.createElement("i");
-                dot.className = "task-dot";
-                dots.appendChild(dot);
-            }
-
-            cell.appendChild(dots);
-            cell.title = `${dayTasks.length} task(s)`;
-        }
-
-        cell.addEventListener("click", function() {
-            selectedDate = dateKey;
-            renderCalendar();
-            renderCalendarTasks();
+        const dayName = document.createElement("span");
+        dayName.className = "week-day-name";
+        dayName.textContent = date.toLocaleDateString("en-IN", {
+            weekday: "short"
         });
 
-        calendarDays.appendChild(cell);
+        const dayNumber = document.createElement("span");
+        dayNumber.className = "week-day-number";
+        dayNumber.textContent = date.getDate();
+
+        const taskCount = document.createElement("span");
+        taskCount.className = "week-task-count";
+        taskCount.textContent =
+            dayTasks.length + (dayTasks.length === 1 ? " task" : " tasks");
+
+        dayButton.append(dayName, dayNumber, taskCount);
+
+        if (dayTasks.length > 0) {
+            const dot = document.createElement("span");
+            dot.className = "week-task-dot";
+            dayButton.appendChild(dot);
+        }
+
+        dayButton.addEventListener("click", function() {
+            selectedDate = dateKey;
+            renderWeeklyCalendar();
+        });
+
+        weekGrid.appendChild(dayButton);
     }
 
-    renderCalendarTasks();
+    renderSelectedDayTasks();
 }
 
 // =====================================
-// TASKS FOR SELECTED CALENDAR DATE
+// SELECTED DAY TASKS
 // =====================================
 
-function renderCalendarTasks() {
-    calendarTaskList.innerHTML = "";
+function renderSelectedDayTasks() {
+    weeklyTaskList.innerHTML = "";
 
-    const dateTasks = tasks.filter(
-        task => task.dueDate === selectedDate
-    );
-
-    selectedDateTitle.textContent =
+    selectedDayTitle.textContent =
         "Tasks for " + formatDate(selectedDate);
 
-    if (dateTasks.length === 0) {
+    const dayTasks = tasks
+        .filter(task => task.dueDate === selectedDate)
+        .sort((a, b) => {
+            // Tasks with a time appear in time order.
+            if (!a.dueTime && !b.dueTime) return 0;
+            if (!a.dueTime) return 1;
+            if (!b.dueTime) return -1;
+
+            return a.dueTime.localeCompare(b.dueTime);
+        });
+
+    dailyTaskCount.textContent =
+        dayTasks.length + (dayTasks.length === 1 ? " task" : " tasks");
+
+    if (dayTasks.length === 0) {
         const message = document.createElement("p");
         message.className = "empty-message";
-        message.textContent = "No tasks scheduled for this date.";
+        message.textContent = "No tasks scheduled for this day.";
 
-        calendarTaskList.appendChild(message);
+        weeklyTaskList.appendChild(message);
         return;
     }
 
-    dateTasks.forEach(task => {
-        calendarTaskList.appendChild(createTaskElement(task));
+    dayTasks.forEach(task => {
+        weeklyTaskList.appendChild(createTaskElement(task, true));
     });
 }
 
-// Previous month
-prevMonth.addEventListener("click", function() {
-    calendarMonth.setMonth(calendarMonth.getMonth() - 1);
-    renderCalendar();
+// Previous week
+prevWeek.addEventListener("click", function() {
+    weekStart.setDate(weekStart.getDate() - 7);
+    selectedDate = getDateKey(weekStart);
+
+    renderWeeklyCalendar();
 });
 
-// Next month
-nextMonth.addEventListener("click", function() {
-    calendarMonth.setMonth(calendarMonth.getMonth() + 1);
-    renderCalendar();
+// Next week
+nextWeek.addEventListener("click", function() {
+    weekStart.setDate(weekStart.getDate() + 7);
+    selectedDate = getDateKey(weekStart);
+
+    renderWeeklyCalendar();
 });
 
-// Go to today
-todayButton.addEventListener("click", function() {
+// Go to current week
+thisWeek.addEventListener("click", function() {
     const now = new Date();
-
     now.setHours(0, 0, 0, 0);
 
+    weekStart = getWeekStart(now);
     selectedDate = getDateKey(now);
-    calendarMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-    renderCalendar();
+    renderWeeklyCalendar();
 });
 
 // =====================================
-// RENDER EVERYTHING
+// RENDER ALL FEATURES
 // =====================================
 
 function renderAll() {
     renderTasks();
-    renderCalendar();
+    renderWeeklyCalendar();
 }
 
 // =====================================

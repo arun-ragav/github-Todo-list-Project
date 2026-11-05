@@ -301,3 +301,260 @@
     <script src="app.js"></script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My To-Do List | V21</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <header class="header">
+        <div class="profile">
+            <img src="G.K.G.Arun Ragav.png" alt="Profile">
+            <div>
+                <h1>My To-Do List</h1>
+                <p>G.K.G. Arun Ragav | V21 Weekly Scheduler</p>
+            </div>
+        </div>
+        <button id="themeToggle" class="theme-btn">🌙 Dark Mode</button>
+    </header>
+
+    <!-- Counters -->
+    <section class="stats">
+        <div class="stat-card">
+            <h3>Total Tasks</h3>
+            <p id="totalTasks">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Active</h3>
+            <p id="activeTasks">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Completed</h3>
+            <p id="completedTasks">0</p>
+        </div>
+    </section>
+
+    <!-- Deadline Summary -->
+    <section class="panel">
+        <h2>Deadline Summary</h2>
+        <div class="deadline-summary">
+            <div>🔴 Overdue: <strong id="overdueCount">0</strong></div>
+            <div>🟠 Due Today: <strong id="todayCount">0</strong></div>
+            <div>🟢 Upcoming: <strong id="upcomingCount">0</strong></div>
+        </div>
+    </section>
+
+    <!-- Progress Dashboard -->
+    <section class="panel">
+        <h2>Progress Dashboard</h2>
+        <div class="progress-info">
+            <h3 id="progressPercentage">0% Completed</h3>
+            <p id="progressTotal">Total Tasks: 0</p>
+            <p id="progressCompleted">Completed: 0</p>
+            <p id="progressRemaining">Remaining: 0</p>
+        </div>
+        <div class="progress-track">
+            <div id="overallProgressBar" class="progress-fill"></div>
+        </div>
+        <h3 class="category-progress-heading">Category Progress</h3>
+        <div id="categoryProgressList"></div>
+    </section>
+
+    <!-- V21 Weekly Calendar -->
+    <section class="panel">
+        <div class="calendar-heading">
+            <h2>Weekly Calendar</h2>
+            <div class="calendar-controls">
+                <button id="prevWeek">❮</button>
+                <button id="thisWeek">Today</button>
+                <button id="nextWeek">❯</button>
+            </div>
+        </div>
+
+        <h3 id="weekRange" class="week-range"></h3>
+
+        <div class="week-grid" id="weekGrid"></div>
+
+        <div class="week-legend">
+            <span>🟢 Today</span>
+            <span>🔵 Selected day</span>
+            <span>🟠 Has tasks</span>
+        </div>
+
+        <div class="selected-day">
+            <h3 id="selectedDayTitle">Tasks for selected day</h3>
+            <p id="dailyTaskCount" class="daily-count">0 tasks</p>
+            <div id="weeklyTaskList"></div>
+        </div>
+    </section>
+
+    <!-- Add Task -->
+    <section class="panel">
+        <h2>Add New Task</h2>
+
+        <form id="taskForm">
+            <label for="taskInput">Task Name</label>
+            <input type="text" id="taskInput"
+                   placeholder="Enter your task" required>
+
+            <div class="form-row">
+                <div>
+                    <label for="dueDate">Due Date</label>
+                    <input type="date" id="dueDate">
+                </div>
+                <div>
+                    <label for="dueTime">Due Time</label>
+                    <input type="time" id="dueTime">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div>
+                    <label for="priority">Priority</label>
+                    <select id="priority">
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="category">Category</label>
+                    <select id="category">
+                        <option value="study">Study</option>
+                        <option value="college">College</option>
+                        <option value="project">Project</option>
+                        <option value="personal">Personal</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="primary-btn">+ Add Task</button>
+        </form>
+    </section>
+
+    <!-- Edit Task -->
+    <section id="editSection" class="panel hidden">
+        <h2>Edit Task</h2>
+
+        <form id="editForm">
+            <label for="editTaskInput">Task Name</label>
+            <input type="text" id="editTaskInput" required>
+
+            <div class="form-row">
+                <div>
+                    <label for="editDueDate">Due Date</label>
+                    <input type="date" id="editDueDate">
+                </div>
+                <div>
+                    <label for="editDueTime">Due Time</label>
+                    <input type="time" id="editDueTime">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div>
+                    <label for="editPriority">Priority</label>
+                    <select id="editPriority">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="editCategory">Category</label>
+                    <select id="editCategory">
+                        <option value="study">Study</option>
+                        <option value="college">College</option>
+                        <option value="project">Project</option>
+                        <option value="personal">Personal</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="primary-btn">Save Changes</button>
+                <button type="button" id="cancelEdit" class="secondary-btn">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </section>
+
+    <!-- Manage Tasks -->
+    <section class="panel">
+        <h2>Manage Tasks</h2>
+
+        <input type="text" id="searchInput"
+               placeholder="Search tasks...">
+
+        <div class="form-row">
+            <div>
+                <label for="prioritySort">Sort by Priority</label>
+                <select id="prioritySort">
+                    <option value="none">Default</option>
+                    <option value="high">High to Low</option>
+                    <option value="low">Low to High</option>
+                </select>
+            </div>
+            <div>
+                <label for="deadlineFilter">Deadline</label>
+                <select id="deadlineFilter">
+                    <option value="all">All Deadlines</option>
+                    <option value="overdue">Overdue</option>
+                    <option value="today">Due Today</option>
+                    <option value="upcoming">Upcoming</option>
+                    <option value="no-date">No Due Date</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="filter-group">
+            <h3>Status Filter</h3>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="active">Active</button>
+                <button class="filter-btn" data-filter="completed">Completed</button>
+            </div>
+        </div>
+
+        <div class="filter-group">
+            <h3>Category Filter</h3>
+            <div class="filter-buttons">
+                <button class="category-filter active" data-category="all">All</button>
+                <button class="category-filter" data-category="study">Study</button>
+                <button class="category-filter" data-category="college">College</button>
+                <button class="category-filter" data-category="project">Project</button>
+                <button class="category-filter" data-category="personal">Personal</button>
+                <button class="category-filter" data-category="other">Other</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- All Tasks -->
+    <section class="panel">
+        <h2>My Tasks</h2>
+        <div id="taskList"></div>
+        <p id="emptyMessage" class="empty-message">
+            No tasks found. Add your first task!
+        </p>
+    </section>
+
+    <footer>
+        <p>My To-Do List | V21 Weekly Scheduler</p>
+        <p>Stay organized. Complete your goals.</p>
+    </footer>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
+
