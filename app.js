@@ -1,7 +1,7 @@
 
-// =====================================
-// MY TO-DO LIST - V21 WEEKLY SCHEDULER
-// =====================================
+// ==========================================
+// MY TO-DO LIST - V22 NOTIFICATION SYSTEM
+// ==========================================
 
 const categoryLabels = {
     study: "Study",
@@ -23,9 +23,9 @@ const priorityOrder = {
     low: 1
 };
 
-// =====================================
+// ==========================================
 // DOM ELEMENTS
-// =====================================
+// ==========================================
 
 const taskForm = document.getElementById("taskForm");
 const taskInput = document.getElementById("taskInput");
@@ -33,6 +33,8 @@ const dueDate = document.getElementById("dueDate");
 const dueTime = document.getElementById("dueTime");
 const priority = document.getElementById("priority");
 const category = document.getElementById("category");
+const reminderEnabled = document.getElementById("reminderEnabled");
+const reminderMinutes = document.getElementById("reminderMinutes");
 
 const taskList = document.getElementById("taskList");
 const emptyMessage = document.getElementById("emptyMessage");
@@ -56,9 +58,14 @@ const editDueDate = document.getElementById("editDueDate");
 const editDueTime = document.getElementById("editDueTime");
 const editPriority = document.getElementById("editPriority");
 const editCategory = document.getElementById("editCategory");
+const editReminderEnabled = document.getElementById("editReminderEnabled");
+const editReminderMinutes = document.getElementById("editReminderMinutes");
 const cancelEdit = document.getElementById("cancelEdit");
 
 const themeToggle = document.getElementById("themeToggle");
+
+const notificationStatus = document.getElementById("notificationStatus");
+const enableNotifications = document.getElementById("enableNotifications");
 
 const progressPercentage = document.getElementById("progressPercentage");
 const progressTotal = document.getElementById("progressTotal");
@@ -67,7 +74,7 @@ const progressRemaining = document.getElementById("progressRemaining");
 const overallProgressBar = document.getElementById("overallProgressBar");
 const categoryProgressList = document.getElementById("categoryProgressList");
 
-// Weekly calendar elements
+// Weekly calendar
 const weekGrid = document.getElementById("weekGrid");
 const weekRange = document.getElementById("weekRange");
 const prevWeek = document.getElementById("prevWeek");
@@ -77,9 +84,9 @@ const selectedDayTitle = document.getElementById("selectedDayTitle");
 const dailyTaskCount = document.getElementById("dailyTaskCount");
 const weeklyTaskList = document.getElementById("weeklyTaskList");
 
-// =====================================
-// DATA AND STATE
-// =====================================
+// ==========================================
+// APPLICATION DATA
+// ==========================================
 
 let tasks = loadTasks();
 
@@ -93,9 +100,13 @@ today.setHours(0, 0, 0, 0);
 let selectedDate = getDateKey(today);
 let weekStart = getWeekStart(today);
 
-// =====================================
+// Store reminders already sent.
+// This prevents duplicate notifications.
+let sentReminders = loadSentReminders();
+
+// ==========================================
 // LOCAL STORAGE
-// =====================================
+// ==========================================
 
 function loadTasks() {
     try {
@@ -114,7 +125,13 @@ function loadTasks() {
                 priority: ["low", "medium", "high"].includes(task.priority)
                     ? task.priority : "medium",
                 category: Object.hasOwn(categoryLabels, task.category)
-                    ? task.category : "other"
+                    ? task.category : "other",
+
+                // V22 reminder fields
+                reminderEnabled: Boolean(task.reminderEnabled),
+                reminderMinutes: [5, 10, 15, 30, 60].includes(
+                    Number(task.reminderMinutes)
+                ) ? Number(task.reminderMinutes) : 15
             }))
             .filter(task => task.text.trim() !== "");
 
@@ -128,9 +145,22 @@ function saveTasks() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-// =====================================
+function loadSentReminders() {
+    try {
+        const saved = JSON.parse(localStorage.getItem("sentReminders"));
+        return Array.isArray(saved) ? saved : [];
+    } catch {
+        return [];
+    }
+}
+
+function saveSentReminders() {
+    localStorage.setItem("sentReminders", JSON.stringify(sentReminders));
+}
+
+// ==========================================
 // DATE FUNCTIONS
-// =====================================
+// ==========================================
 
 function getDateKey(date) {
     const year = date.getFullYear();
@@ -186,7 +216,6 @@ function getDeadlineText(task) {
     return text;
 }
 
-// Sunday is the first day of the week.
 function getWeekStart(date) {
     const result = new Date(date);
 
@@ -214,9 +243,167 @@ function formatWeekRange(start) {
     return `${first} - ${last}`;
 }
 
-// =====================================
+// ==========================================
+// V22 NOTIFICATION PERMISSION
+// ==========================================
+
+function updateNotificationStatus() {
+    if (!("Notification" in window)) {
+        notificationStatus.textContent =
+            "This browser does not support notifications.";
+        notificationStatus.className = "notification-status denied";
+        enableNotifications.disabled = true;
+        enableNotifications.textContent = "Notifications Not Supported";
+        return;
+    }
+
+    const permission = Notification.permission;
+
+    if (permission === "granted") {
+        notificationStatus.textContent =
+            "Notifications are enabled. You can receive task reminders.";
+        notificationStatus.className = "notification-status enabled";
+        enableNotifications.textContent = "Notifications Enabled";
+        enableNotifications.disabled = true;
+
+    } else if (permission === "denied") {
+        notificationStatus.textContent =
+            "Notifications are blocked. Allow them in your browser site settings.";
+        notificationStatus.className = "notification-status denied";
+        enableNotifications.textContent = "Notifications Blocked";
+
+    } else {
+        notificationStatus.textContent =
+            "Notifications have not been enabled. Click the button to allow them.";
+        notificationStatus.className = "notification-status";
+        enableNotifications.textContent = "Enable Browser Notifications";
+        enableNotifications.disabled = false;
+    }
+}
+
+enableNotifications.addEventListener("click", async function() {
+    if (!("Notification" in window)) {
+        alert("Your browser does not support notifications.");
+        updateNotificationStatus();
+        return;
+    }
+
+    try {
+        const permission = await Notification.requestPermission();
+
+        updateNotificationStatus();
+
+        if (permission === "granted") {
+            alert("Notifications enabled successfully!");
+            checkReminders();
+        } else if (permission === "denied") {
+            alert("Notifications were blocked. Check your browser site settings.");
+        } else {
+            alert("Notification permission was not granted.");
+        }
+
+    } catch (error) {
+        console.error("Notification permission error:", error);
+        alert("Could not request notification permission.");
+    }
+});
+
+// ==========================================
+// V22 REMINDER DATE AND TIME
+// ==========================================
+
+function getTaskDueTimestamp(task) {
+    if (!task.dueDate || !task.dueTime) return null;
+
+    const [year, month, day] = task.dueDate.split("-").map(Number);
+    const [hours, minutes] = task.dueTime.split(":").map(Number);
+
+    const due = new Date(year, month - 1, day, hours, minutes, 0, 0);
+
+    if (Number.isNaN(due.getTime())) return null;
+
+    return due.getTime();
+}
+
+function getReminderKey(task) {
+    return `${task.id}_${task.dueDate}_${task.dueTime}_${task.reminderMinutes}`;
+}
+
+function getReminderStatus(task) {
+    if (!task.reminderEnabled) {
+        return "Reminder off";
+    }
+
+    if (!task.dueDate || !task.dueTime) {
+        return "Add date and time for reminder";
+    }
+
+    const key = getReminderKey(task);
+
+    if (sentReminders.includes(key)) {
+        return "Reminder sent";
+    }
+
+    return `Reminder set: ${task.reminderMinutes} min before`;
+}
+
+// ==========================================
+// V22 CHECK AND SEND REMINDERS
+// ==========================================
+
+function checkReminders() {
+    if (!("Notification" in window)) return;
+    if (Notification.permission !== "granted") return;
+
+    const now = Date.now();
+
+    tasks.forEach(task => {
+        if (task.completed || !task.reminderEnabled) return;
+        if (!task.dueDate || !task.dueTime) return;
+
+        const dueTimestamp = getTaskDueTimestamp(task);
+
+        if (!dueTimestamp) return;
+
+        const reminderTimestamp =
+            dueTimestamp - task.reminderMinutes * 60 * 1000;
+
+        const reminderKey = getReminderKey(task);
+
+        // Send once when the reminder time has arrived,
+        // but do not send reminders after the task's due time.
+        if (
+            now >= reminderTimestamp &&
+            now < dueTimestamp &&
+            !sentReminders.includes(reminderKey)
+        ) {
+            sendTaskNotification(task);
+
+            sentReminders.push(reminderKey);
+            saveSentReminders();
+        }
+    });
+}
+
+function sendTaskNotification(task) {
+    const notification = new Notification("⏰ Task Reminder", {
+        body: `${task.text} is due in ${task.reminderMinutes} minutes.`,
+        tag: `task-reminder-${task.id}`,
+        icon: "G.K.G.Arun Ragav.png"
+    });
+
+    notification.onclick = function() {
+        window.focus();
+        notification.close();
+    };
+}
+
+// Check reminders every 30 seconds while this page is open.
+setInterval(checkReminders, 30000);
+
+// ==========================================
 // ADD TASK
-// =====================================
+// ==========================================
 
 taskForm.addEventListener("submit", function(event) {
     event.preventDefault();
@@ -235,26 +422,32 @@ taskForm.addEventListener("submit", function(event) {
         dueDate: dueDate.value,
         dueTime: dueTime.value,
         priority: priority.value,
-        category: category.value
+        category: category.value,
+        reminderEnabled: reminderEnabled.checked,
+        reminderMinutes: Number(reminderMinutes.value)
     };
 
     tasks.push(newTask);
-
     saveTasks();
 
-    // If a due date exists, show its week.
     if (newTask.dueDate) {
         selectedDate = newTask.dueDate;
         weekStart = getWeekStart(parseDate(newTask.dueDate));
     }
 
     taskForm.reset();
+
+    // Restore default reminder options.
+    reminderEnabled.checked = true;
+    reminderMinutes.value = "15";
+
     renderAll();
+    checkReminders();
 });
 
-// =====================================
+// ==========================================
 // DELETE TASK
-// =====================================
+// ==========================================
 
 function deleteTask(id) {
     if (!confirm("Are you sure you want to delete this task?")) {
@@ -271,9 +464,9 @@ function deleteTask(id) {
     renderAll();
 }
 
-// =====================================
-// COMPLETE TASK
-// =====================================
+// ==========================================
+// COMPLETE / UNCOMPLETE TASK
+// ==========================================
 
 function toggleTask(id) {
     tasks = tasks.map(task => {
@@ -291,9 +484,9 @@ function toggleTask(id) {
     renderAll();
 }
 
-// =====================================
+// ==========================================
 // EDIT TASK
-// =====================================
+// ==========================================
 
 function editTask(id) {
     const task = tasks.find(item => item.id === id);
@@ -307,6 +500,8 @@ function editTask(id) {
     editDueTime.value = task.dueTime;
     editPriority.value = task.priority;
     editCategory.value = task.category;
+    editReminderEnabled.checked = task.reminderEnabled;
+    editReminderMinutes.value = String(task.reminderMinutes);
 
     editSection.classList.remove("hidden");
 
@@ -323,24 +518,37 @@ editForm.addEventListener("submit", function(event) {
 
     if (!text || editingTaskId === null) return;
 
-    tasks = tasks.map(task => {
-        if (task.id === editingTaskId) {
-            return {
-                ...task,
-                text: text,
-                dueDate: editDueDate.value,
-                dueTime: editDueTime.value,
-                priority: editPriority.value,
-                category: editCategory.value
-            };
-        }
+    const oldTask = tasks.find(task => task.id === editingTaskId);
 
-        return task;
-    });
+    if (!oldTask) return;
+
+    const updatedTask = {
+        ...oldTask,
+        text: text,
+        dueDate: editDueDate.value,
+        dueTime: editDueTime.value,
+        priority: editPriority.value,
+        category: editCategory.value,
+        reminderEnabled: editReminderEnabled.checked,
+        reminderMinutes: Number(editReminderMinutes.value)
+    };
+
+    // If reminder details change, allow the new reminder to be sent.
+    if (getReminderKey(oldTask) !== getReminderKey(updatedTask)) {
+        sentReminders = sentReminders.filter(
+            key => key !== getReminderKey(oldTask)
+        );
+        saveSentReminders();
+    }
+
+    tasks = tasks.map(task =>
+        task.id === editingTaskId ? updatedTask : task
+    );
 
     saveTasks();
     closeEditForm();
     renderAll();
+    checkReminders();
 });
 
 function closeEditForm() {
@@ -351,9 +559,9 @@ function closeEditForm() {
 
 cancelEdit.addEventListener("click", closeEditForm);
 
-// =====================================
+// ==========================================
 // CREATE TASK CARD
-// =====================================
+// ==========================================
 
 function createTaskElement(task, showTime = false) {
     const card = document.createElement("div");
@@ -398,7 +606,18 @@ function createTaskElement(task, showTime = false) {
         deadlineTag.textContent = "Completed";
     }
 
-    meta.append(priorityTag, categoryTag, deadlineTag);
+    const reminderTag = document.createElement("span");
+    reminderTag.className = "tag";
+
+    if (task.reminderEnabled) {
+        reminderTag.classList.add("reminder-on");
+    } else {
+        reminderTag.classList.add("reminder-off");
+    }
+
+    reminderTag.textContent = getReminderStatus(task);
+
+    meta.append(priorityTag, categoryTag, deadlineTag, reminderTag);
 
     if (showTime && task.dueTime) {
         const time = document.createElement("p");
@@ -433,9 +652,9 @@ function createTaskElement(task, showTime = false) {
     return card;
 }
 
-// =====================================
+// ==========================================
 // DISPLAY ALL TASKS
-// =====================================
+// ==========================================
 
 function renderTasks() {
     taskList.innerHTML = "";
@@ -495,9 +714,9 @@ function renderTasks() {
     updateProgressDashboard();
 }
 
-// =====================================
+// ==========================================
 // COUNTERS
-// =====================================
+// ==========================================
 
 function updateCounters() {
     const total = tasks.length;
@@ -521,9 +740,9 @@ function updateCounters() {
     ).length;
 }
 
-// =====================================
+// ==========================================
 // PROGRESS DASHBOARD
-// =====================================
+// ==========================================
 
 function updateProgressDashboard() {
     const total = tasks.length;
@@ -586,9 +805,9 @@ function updateProgressDashboard() {
     });
 }
 
-// =====================================
+// ==========================================
 // STATUS FILTERS
-// =====================================
+// ==========================================
 
 document.querySelectorAll(".filter-btn").forEach(button => {
     button.addEventListener("click", function() {
@@ -603,9 +822,9 @@ document.querySelectorAll(".filter-btn").forEach(button => {
     });
 });
 
-// =====================================
+// ==========================================
 // CATEGORY FILTERS
-// =====================================
+// ==========================================
 
 document.querySelectorAll(".category-filter").forEach(button => {
     button.addEventListener("click", function() {
@@ -620,17 +839,17 @@ document.querySelectorAll(".category-filter").forEach(button => {
     });
 });
 
-// =====================================
+// ==========================================
 // SEARCH AND SORTING
-// =====================================
+// ==========================================
 
 searchInput.addEventListener("input", renderTasks);
 prioritySort.addEventListener("change", renderTasks);
 deadlineFilter.addEventListener("change", renderTasks);
 
-// =====================================
+// ==========================================
 // DARK / LIGHT MODE
-// =====================================
+// ==========================================
 
 function updateThemeButton() {
     themeToggle.textContent =
@@ -657,15 +876,12 @@ themeToggle.addEventListener("click", function() {
     updateThemeButton();
 });
 
-// =====================================
-// V21 WEEKLY CALENDAR
-// =====================================
+// ==========================================
+// WEEKLY CALENDAR
+// ==========================================
 
 function renderWeeklyCalendar() {
     weekGrid.innerHTML = "";
-
-    const endOfWeek = new Date(weekStart);
-    endOfWeek.setDate(weekStart.getDate() + 6);
 
     weekRange.textContent = formatWeekRange(weekStart);
 
@@ -725,9 +941,9 @@ function renderWeeklyCalendar() {
     renderSelectedDayTasks();
 }
 
-// =====================================
+// ==========================================
 // SELECTED DAY TASKS
-// =====================================
+// ==========================================
 
 function renderSelectedDayTasks() {
     weeklyTaskList.innerHTML = "";
@@ -738,7 +954,6 @@ function renderSelectedDayTasks() {
     const dayTasks = tasks
         .filter(task => task.dueDate === selectedDate)
         .sort((a, b) => {
-            // Tasks with a time appear in time order.
             if (!a.dueTime && !b.dueTime) return 0;
             if (!a.dueTime) return 1;
             if (!b.dueTime) return -1;
@@ -779,7 +994,7 @@ nextWeek.addEventListener("click", function() {
     renderWeeklyCalendar();
 });
 
-// Go to current week
+// Current week
 thisWeek.addEventListener("click", function() {
     const now = new Date();
     now.setHours(0, 0, 0, 0);
@@ -790,18 +1005,30 @@ thisWeek.addEventListener("click", function() {
     renderWeeklyCalendar();
 });
 
-// =====================================
+// ==========================================
 // RENDER ALL FEATURES
-// =====================================
+// ==========================================
 
 function renderAll() {
     renderTasks();
     renderWeeklyCalendar();
 }
 
-// =====================================
+// ==========================================
 // START APPLICATION
-// =====================================
+// ==========================================
 
 loadTheme();
+updateNotificationStatus();
 renderAll();
+
+// Check reminders immediately when the page opens.
+checkReminders();
+
+// Re-check when the user returns to the page.
+document.addEventListener("visibilitychange", function() {
+    if (!document.hidden) {
+        checkReminders();
+        renderAll();
+    }
+});

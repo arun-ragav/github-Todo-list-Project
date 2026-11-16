@@ -175,6 +175,62 @@ label {
     display: none;
 }
 
+/* V22 Notification Settings */
+
+.notification-panel {
+    border-left: 5px solid var(--primary);
+}
+
+.notification-status {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 14px;
+    line-height: 1.5;
+}
+
+.notification-status.enabled {
+    color: #219653;
+    font-weight: bold;
+}
+
+.notification-status.denied {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.help-text {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+    margin-top: 12px;
+}
+
+.reminder-options {
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    margin: 5px 0 15px;
+}
+
+.check-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.check-label input {
+    width: auto;
+    margin: 0;
+    accent-color: var(--primary);
+}
+
+.reminder-options select {
+    margin-bottom: 0;
+}
+
 /* Deadline Summary */
 
 .deadline-summary {
@@ -239,7 +295,7 @@ label {
     background: var(--primary);
 }
 
-/* V21 Weekly Calendar */
+/* Weekly Calendar */
 
 .calendar-heading {
     display: flex;
@@ -466,6 +522,16 @@ label {
 
 .deadline-upcoming {
     color: #27ae60;
+}
+
+.reminder-on {
+    background: #dff5e5;
+    color: #217a3b;
+}
+
+.reminder-off {
+    background: var(--background);
+    color: var(--muted);
 }
 
 .task-actions {
